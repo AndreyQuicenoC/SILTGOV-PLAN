@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Información del proyecto SILTGOV — Sistema Integrado de Liquidaciones para la Gobernación del Valle"
+    />
+    <title>Proyecto — SILTGOV</title>
+    <link rel="stylesheet" href="../styles/project.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- ── Header ──────────────────────────────────────────── -->
+    <header class="header">
+      <div class="header-inner">
+        <a href="../index.html" class="header-brand">
+          ⚖️ SILTGOV
+        </a>
+        <div class="header-actions">
+          <a href="../index.html" class="back-btn">← Volver al inicio</a>
+          <button
+            class="theme-btn"
+            id="theme-toggle"
+            aria-label="Cambiar tema"
+            title="Cambiar tema"
+          >🌙</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="main-content">
+
+      <!-- ── Hero ─────────────────────────────────────────── -->
+      <section class="project-hero" aria-label="Presentación del proyecto">
+        <h1 class="project-hero-title" id="hero-project-name">SILTGOV</h1>
+        <p class="project-hero-subtitle" id="hero-full-name"></p>
+        <p class="project-hero-subtitle" id="hero-tagline"></p>
+        <div class="hero-badges" id="hero-badges"></div>
+      </section>
+
+      <!-- ── Descripción del proyecto ─────────────────────── -->
+      <div class="project-section">
+        <h2 class="section-title">
+          <span class="section-icon">📋</span>
+          Descripción del proyecto
+        </h2>
+        <hr class="section-divider" />
+        <div class="description-grid">
+          <div class="info-card">
+            <div class="info-card-label">¿Qué es SILTGOV?</div>
+            <div class="info-card-text" id="project-description-text"></div>
+          </div>
+          <div class="info-card">
+            <div class="info-card-label">Contexto institucional</div>
+            <div class="info-card-text" id="project-context-text"></div>
+          </div>
+          <div class="info-card">
+            <div class="info-card-label">✅ Dentro del alcance</div>
+            <ul class="role-list" id="scope-in-list" style="margin-top:0.3rem"></ul>
+          </div>
+          <div class="info-card">
+            <div class="info-card-label">🚫 Fuera del alcance</div>
+            <ul class="role-list" id="scope-out-list" style="margin-top:0.3rem; --check-color:#EF4444"></ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Objetivos (carrusel) ──────────────────────────── -->
+      <div class="project-section">
+        <h2 class="section-title">
+          <span class="section-icon">🎯</span>
+          Objetivos del proyecto
+        </h2>
+        <hr class="section-divider" />
+        <div class="carousel-wrapper">
+          <div class="carousel-track" id="carousel-track"></div>
+        </div>
+        <div class="carousel-controls">
+          <button class="carousel-btn" onclick="carouselPrev()" aria-label="Anterior">‹</button>
+          <div class="carousel-dots" id="carousel-dots"></div>
+          <button class="carousel-btn" onclick="carouselNext()" aria-label="Siguiente">›</button>
+        </div>
+      </div>
+
+      <!-- ── Marco legal ───────────────────────────────────── -->
+      <div class="project-section">
+        <h2 class="section-title">
+          <span class="section-icon">⚖️</span>
+          Marco legal y contextual
+        </h2>
+        <hr class="section-divider" />
+        <div class="legal-accordion" id="legal-accordion"></div>
+      </div>
+
+      <!-- ── Roles del sistema ─────────────────────────────── -->
+      <div class="project-section">
+        <h2 class="section-title">
+          <span class="section-icon">👥</span>
+          Roles del sistema
+        </h2>
+        <hr class="section-divider" />
+        <div class="roles-grid" id="roles-grid"></div>
+      </div>
+
+      <!-- ── Flujo de estados ──────────────────────────────── -->
+      <div class="project-section">
+        <h2 class="section-title">
+          <span class="section-icon">🔄</span>
+          Ciclo de vida de una liquidación
+        </h2>
+        <hr class="section-divider" />
+        <div class="states-flow" id="states-flow"></div>
+      </div>
+
+      <!-- ── Arquitectura ──────────────────────────────────── -->
+      <div class="project-section">
+        <h2 class="section-title">
+          <span class="section-icon">🏗️</span>
+          Arquitectura del sistema
+        </h2>
+        <hr class="section-divider" />
+
+        <div class="info-card" style="margin-bottom:1.2rem">
+          <div class="info-card-label">Descripción general</div>
+          <div class="info-card-text" id="arch-description"></div>
+          <ul class="role-list" id="arch-principles" style="margin-top:0.8rem"></ul>
+        </div>
+
+        <div class="arch-diagram">
+          <!-- Frontend Layer -->
+          <div class="arch-layer">
+            <div class="arch-layer-label">Cliente Web</div>
+            <div class="arch-services-row">
+              <div class="arch-service-box" style="border-color:#3B82F644; text-align:center">
+                <div class="arch-service-icon">💻</div>
+                <div class="arch-service-name">Frontend SPA</div>
+                <div class="arch-service-desc">React / Vue — Vistas por rol, formularios y reportes</div>
+                <div class="arch-tech-tags">
+                  <span class="arch-tech-tag">HTML/CSS/JS</span>
+                  <span class="arch-tech-tag">Axios</span>
+                  <span class="arch-tech-tag">Chart.js</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Connection arrow -->
+          <div class="arch-connection-row">
+            <span class="arch-connection-arrow">↕</span>
+            <span>API REST · JWT auth · HTTPS</span>
+            <span class="arch-connection-arrow">↕</span>
+          </div>
+
+          <!-- Cloudflare / Gateway layer -->
+          <div class="arch-layer">
+            <div class="arch-layer-label">Gateway / CDN</div>
+            <div class="arch-services-row">
+              <div class="arch-service-box" style="border-color:#F59E0B44; text-align:center">
+                <div class="arch-service-icon">🛡️</div>
+                <div class="arch-service-name">Cloudflare</div>
+                <div class="arch-service-desc">CDN + DDoS protection + HTTPS termination</div>
+                <div class="arch-tech-tags">
+                  <span class="arch-tech-tag">CDN</span>
+                  <span class="arch-tech-tag">DDoS Shield</span>
+                  <span class="arch-tech-tag">TLS 1.3</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Connection arrow -->
+          <div class="arch-connection-row">
+            <span class="arch-connection-arrow">↕</span>
+            <span>Inter-service communication</span>
+            <span class="arch-connection-arrow">↕</span>
+          </div>
+
+          <!-- Microservices Layer -->
+          <div class="arch-layer">
+            <div class="arch-layer-label">Microservicios (AWS EC2)</div>
+            <div class="arch-services-row" id="arch-services"></div>
+          </div>
+
+          <!-- Connection arrow -->
+          <div class="arch-connection-row">
+            <span class="arch-connection-arrow">↕</span>
+            <span>Database connections</span>
+            <span class="arch-connection-arrow">↕</span>
+          </div>
+
+          <!-- Data Layer -->
+          <div class="arch-layer">
+            <div class="arch-layer-label">Capa de datos (AWS)</div>
+            <div class="arch-services-row">
+              <div class="arch-service-box" style="border-color:#8B5CF644">
+                <div class="arch-service-icon">🗃️</div>
+                <div class="arch-service-name">Amazon RDS (PostgreSQL)</div>
+                <div class="arch-service-desc">Base de datos relacional con separación lógica por entidad</div>
+                <div class="arch-tech-tags">
+                  <span class="arch-tech-tag">PostgreSQL</span>
+                  <span class="arch-tech-tag">Multi-tenant</span>
+                </div>
+              </div>
+              <div class="arch-service-box" style="border-color:#10B98144">
+                <div class="arch-service-icon">📁</div>
+                <div class="arch-service-name">Amazon S3</div>
+                <div class="arch-service-desc">Almacenamiento de adjuntos, PDFs y comprobantes</div>
+                <div class="arch-tech-tags">
+                  <span class="arch-tech-tag">Object Storage</span>
+                  <span class="arch-tech-tag">Signed URLs</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Infrastructure cards -->
+        <h3 style="font-size:0.95rem;font-weight:700;color:var(--color-text);margin-bottom:0.5rem">
+          Infraestructura
+        </h3>
+        <div class="infra-grid" id="arch-infra"></div>
+      </div>
+
+      <!-- ── Seguridad ──────────────────────────────────────── -->
+      <div class="project-section">
+        <h2 class="section-title">
+          <span class="section-icon">🔒</span>
+          Medidas de seguridad
+        </h2>
+        <hr class="section-divider" />
+        <div class="security-grid" id="security-grid"></div>
+      </div>
+
+      <!-- ── Links ──────────────────────────────────────────── -->
+      <div class="project-section">
+        <h2 class="section-title">
+          <span class="section-icon">🔗</span>
+          Recursos y enlaces del proyecto
+        </h2>
+        <hr class="section-divider" />
+        <div class="links-grid" id="links-grid"></div>
+      </div>
+
+    </main>
+
+    <!-- ── Footer ──────────────────────────────────────────── -->
+    <footer class="page-footer">
+      SILTGOV — Sistema Integrado de Liquidaciones · Gobernación del Valle ·
+      ClustLayer | Dev on time &nbsp;·&nbsp; Plan de proyecto 2025
+    </footer>
+
+    <!-- ── Scripts ──────────────────────────────────────────── -->
+    <script src="../data/project_data.js"></script>
+    <script src="../scripts/project.js"></script>
+    <script>
+      // Theme toggle
+      const themeBtn = document.getElementById("theme-toggle");
+      const html = document.documentElement;
+      const saved = localStorage.getItem("siltgov-theme");
+      if (saved) { html.setAttribute("data-theme", saved); themeBtn.textContent = saved === "dark" ? "☀️" : "🌙"; }
+      themeBtn.addEventListener("click", () => {
+        const isDark = html.getAttribute("data-theme") === "dark";
+        const next = isDark ? "light" : "dark";
+        html.setAttribute("data-theme", next);
+        localStorage.setItem("siltgov-theme", next);
+        themeBtn.textContent = next === "dark" ? "☀️" : "🌙";
+      });
+    </script>
+  </body>
+</html>
