@@ -1,0 +1,416 @@
+/* ===================================
+   Team Distribution - Modern Styles with Toggles
+   Extends: user_stories.css (base)
+   Similar to: site_map.css (toggle pattern)
+   =================================== */
+
+/* ===================================
+   Info Section
+   =================================== */
+.info-section {
+  text-align: center;
+  margin-bottom: 2.5rem;
+  padding: 1.5rem;
+  background: var(--bg-secondary);
+  border-radius: 12px;
+}
+
+.info-description {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+/* ===================================
+   Section Titles
+   =================================== */
+.section-title {
+  font-size: 1.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.section-description {
+  font-size: 0.9375rem;
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+/* ===================================
+   Roles & Sprints Containers
+   =================================== */
+.roles-section,
+.sprints-section {
+  margin-bottom: 3rem;
+}
+
+.roles-container,
+.sprints-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* ===================================
+   Zone Container (Toggle Style)
+   Similar to site_map.css
+   =================================== */
+.zone-container {
+  background: var(--bg-primary);
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.zone-container:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* Zone Header */
+.zone-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  user-select: none;
+}
+
+.zone-header:hover {
+  background: var(--bg-secondary);
+}
+
+.zone-header.sprint-header {
+  color: white;
+}
+
+.zone-header.sprint-header:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.zone-header-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+}
+
+/* Role Icon */
+.role-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1rem;
+  color: white;
+  flex-shrink: 0;
+}
+
+/* Sprint Number */
+.sprint-number {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: white;
+  flex-shrink: 0;
+}
+
+/* Zone Name & Count */
+.zone-name {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.zone-count {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-top: 0.25rem;
+}
+
+/* Zone Toggle Button */
+.zone-toggle {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.zone-toggle:hover {
+  background: var(--bg-primary);
+  border-color: var(--primary-color);
+  transform: scale(1.1);
+}
+
+.toggle-icon {
+  font-size: 1.25rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* Zone Content */
+.zone-content {
+  padding: 0 1.5rem 1.5rem;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===================================
+   Role Responsibilities
+   =================================== */
+.role-responsibilities h4 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin: 0 0 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.role-responsibilities ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.role-responsibilities li {
+  padding-left: 1.5rem;
+  position: relative;
+  color: var(--text-primary);
+  line-height: 1.6;
+  font-size: 0.9375rem;
+}
+
+.role-responsibilities li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  color: var(--primary-color);
+  font-weight: bold;
+  font-size: 1.125rem;
+}
+
+/* ===================================
+   Sprint Tasks
+   =================================== */
+.sprint-tasks {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.sprint-task-group {
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.sprint-task-group:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.task-role {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin: 0 0 0.75rem;
+}
+
+.task-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.task-list li {
+  padding-left: 1.25rem;
+  position: relative;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  font-size: 0.875rem;
+}
+
+.task-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  color: var(--primary-color);
+  font-weight: bold;
+}
+
+/* ===================================
+   Loading & Error States
+   =================================== */
+.loading {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-secondary);
+}
+
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--border-color);
+  border-top-color: var(--primary-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.error-state {
+  text-align: center;
+  padding: 3rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 12px;
+  margin: 2rem 0;
+}
+
+.error-state h2 {
+  color: #dc2626;
+  margin: 0 0 1rem;
+  font-size: 1.5rem;
+}
+
+.error-state p {
+  color: #991b1b;
+  margin: 0;
+}
+
+/* ===================================
+   Footer
+   =================================== */
+.footer {
+  margin-top: 4rem;
+  padding: 2rem 0;
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+}
+
+.footer p {
+  margin: 0.5rem 0;
+}
+
+/* ===================================
+   Responsive Design
+   =================================== */
+@media (max-width: 768px) {
+  .section-title {
+    font-size: 1.5rem;
+  }
+
+  .zone-header {
+    padding: 1rem;
+  }
+
+  .zone-content {
+    padding: 0 1rem 1rem;
+  }
+
+  .zone-header-left {
+    gap: 0.75rem;
+  }
+
+  .role-icon,
+  .sprint-number {
+    width: 40px;
+    height: 40px;
+    font-size: 0.875rem;
+  }
+
+  .sprint-number {
+    font-size: 1.25rem;
+  }
+
+  .zone-name {
+    font-size: 1rem;
+  }
+
+  .zone-count {
+    font-size: 0.8125rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .info-section {
+    padding: 1rem;
+  }
+
+  .info-description {
+    font-size: 0.9375rem;
+  }
+
+  .section-title {
+    font-size: 1.25rem;
+  }
+
+  .zone-header-left {
+    gap: 0.5rem;
+  }
+
+  .role-icon,
+  .sprint-number {
+    width: 36px;
+    height: 36px;
+    font-size: 0.75rem;
+  }
+
+  .sprint-number {
+    font-size: 1.125rem;
+  }
+
+  .zone-name {
+    font-size: 0.9375rem;
+  }
+
+  .sprint-tasks {
+    gap: 1rem;
+  }
+}

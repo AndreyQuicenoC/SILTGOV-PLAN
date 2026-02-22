@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Distribución del equipo del Gestor de Finanzas Personales"
+    />
+    <title>Distribución del Equipo - Finanz</title>
+    <link rel="stylesheet" href="../styles/user_stories.css" />
+    <link rel="stylesheet" href="../styles/team_distribution.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="header">
+      <div class="container">
+        <div class="header-content">
+          <h1 class="logo">
+            <span class="logo-icon"></span>
+            Distribución del Equipo
+          </h1>
+          <div class="project-info">
+            <span class="project-name">Finanz</span>
+          </div>
+          <div style="display: flex; gap: 0.5rem; align-items: center">
+            <a
+              href="../index.html"
+              class="back-button"
+              aria-label="Volver al inicio"
+            >
+              <span>←</span> Inicio
+            </a>
+            <button
+              id="theme-toggle"
+              class="theme-toggle"
+              aria-label="Cambiar tema"
+            >
+              <span class="theme-icon">Oscuro</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="main">
+      <div class="container">
+        <!-- Información del equipo -->
+        <section class="info-section">
+          <p class="info-description" id="team-description">
+            <!-- Se cargará desde team_data.js -->
+          </p>
+        </section>
+
+        <!-- Error State -->
+        <div id="error-state" class="error-state" hidden role="alert">
+          <h2>Error al cargar información</h2>
+          <p id="error-message"></p>
+        </div>
+
+        <!-- Roles del equipo -->
+        <section class="roles-section">
+          <h2 class="section-title">Roles del Equipo</h2>
+          <div id="roles-container" class="roles-container">
+            <!-- Se cargará dinámicamente desde team_data.js -->
+          </div>
+        </section>
+
+        <!-- Sprints del proyecto -->
+        <section class="sprints-section">
+          <h2 class="section-title">Distribución por Sprints</h2>
+          <p class="section-description">
+            Planificación de entregas en 10 semanas (5 sprints de 2 semanas)
+          </p>
+          <div id="sprints-container" class="sprints-container">
+            <!-- Se cargará dinámicamente -->
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="container">
+        <p>&copy; 2025 Finanz - Gestor de Finanzas Personales</p>
+        <p>Equipo organizado con metodología ágil Scrum</p>
+      </div>
+    </footer>
+
+    <script src="../data/team_data.js"></script>
+    <script src="../scripts/team_distribution.js"></script>
+  </body>
+</html>
