@@ -5,17 +5,18 @@
 
 // ==================== Estado de la aplicación ====================
 const state = {
-  currentProject: "finanz",
+  currentProject: "siltgov",
   allStories: [],
   filteredStories: [],
   currentTheme: "light",
   epics: new Set(),
+  sprintTotals: {},
 };
 
 // ==================== Constantes ====================
 const PROJECTS = {
-  finanz: {
-    name: "Gestor de Finanzas Personales",
+  siltgov: {
+    name: "Sistema Integrado de Liquidaciones del Gobierno",
   },
 };
 
@@ -127,10 +128,13 @@ function loadStories() {
 
     console.log(`${state.allStories.length} historias cargadas`);
 
-    // Extraer épicas únicas
+    // Extraer epicas unicas y calcular totales por sprint
     state.epics.clear();
+    state.sprintTotals = {};
     state.allStories.forEach((story) => {
       state.epics.add(story.epic);
+      const s = story.sprint || "Sin sprint";
+      state.sprintTotals[s] = (state.sprintTotals[s] || 0) + (story.points || 0);
     });
 
     populateEpicFilter();
@@ -161,7 +165,7 @@ function showEmptyState() {
 
 // ==================== Renderizado ====================
 /**
- * Renderiza las historias filtradas
+ * Renderiza las historias filtradas, agrupadas por sprint con totales
  */
 function renderStories() {
   console.log(`Renderizando ${state.filteredStories.length} historias`);
@@ -175,16 +179,72 @@ function renderStories() {
   elements.emptyState.hidden = true;
 
   try {
-    const storiesHTML = state.filteredStories
-      .map((story) => createStoryCard(story))
-      .join("");
-    elements.storiesContainer.innerHTML = storiesHTML;
+    // Agrupar por sprint para mostrar totales
+    const selectedSprint = elements.sprintFilter.value;
+    const showSprintHeaders = selectedSprint === "all";
+
+    let html = "";
+    if (showSprintHeaders) {
+      // Agrupar por sprint
+      const groups = {};
+      const sprintOrder = [];
+      state.filteredStories.forEach((story) => {
+        const s = story.sprint || "Sin sprint";
+        if (!groups[s]) {
+          groups[s] = [];
+          sprintOrder.push(s);
+        }
+        groups[s].push(story);
+      });
+
+      sprintOrder.forEach((sprint) => {
+        const stories = groups[sprint];
+        const sprintTotal = stories.reduce((acc, s) => acc + (s.points || 0), 0);
+        html += `
+          <div class="sprint-group-header" style="grid-column: 1 / -1; margin: 1rem 0 0.5rem; padding: 0.6rem 1rem; background: var(--bg-secondary); border-radius: 8px; border-left: 4px solid var(--primary-color); display: flex; align-items: center; justify-content: space-between;">
+            <span style="font-weight: 700; color: var(--text-primary); font-size: 0.95rem;">${escapeHtml(sprint)}</span>
+            <span style="background: var(--primary-color); color: white; padding: 0.2rem 0.7rem; border-radius: 20px; font-size: 0.78rem; font-weight: 700;">${sprintTotal} pts</span>
+          </div>
+        `;
+        html += stories.map((story) => createStoryCard(story)).join("");
+      });
+    } else {
+      const sprintTotal = state.filteredStories.reduce(
+        (acc, s) => acc + (s.points || 0), 0
+      );
+      html += `
+        <div class="sprint-group-header" style="grid-column: 1 / -1; margin: 0 0 0.5rem; padding: 0.6rem 1rem; background: var(--bg-secondary); border-radius: 8px; border-left: 4px solid var(--primary-color); display: flex; align-items: center; justify-content: space-between;">
+          <span style="font-weight: 700; color: var(--text-primary); font-size: 0.95rem;">${escapeHtml(selectedSprint)} - ${state.filteredStories.length} historia(s)</span>
+          <span style="background: var(--primary-color); color: white; padding: 0.2rem 0.7rem; border-radius: 20px; font-size: 0.78rem; font-weight: 700;">${sprintTotal} pts</span>
+        </div>
+      `;
+      html += state.filteredStories.map((story) => createStoryCard(story)).join("");
+    }
+
+    elements.storiesContainer.innerHTML = html;
 
     // Agregar event listeners a las tarjetas
     document.querySelectorAll(".story-card").forEach((card, index) => {
+      const visibleStories = elements.storiesContainer.querySelectorAll(".story-card");
+      const storyIndex = Array.from(visibleStories).indexOf(card);
       card.addEventListener("click", () => {
-        console.log(`Abriendo historia ${state.filteredStories[index].code}`);
-        openModal(state.filteredStories[index]);
+        const flatList = state.filteredStories;
+        // Find which story this card corresponds to by order
+        const allCards = Array.from(elements.storiesContainer.querySelectorAll(".story-card"));
+        const cardIdx = allCards.indexOf(card);
+        // Map card index to filtered story (in order)
+        if (cardIdx >= 0 && cardIdx < flatList.length) {
+          openModal(flatList[cardIdx]);
+        }
+      });
+      card.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          const allCards = Array.from(elements.storiesContainer.querySelectorAll(".story-card"));
+          const cardIdx = allCards.indexOf(card);
+          if (cardIdx >= 0 && cardIdx < state.filteredStories.length) {
+            openModal(state.filteredStories[cardIdx]);
+          }
+        }
       });
     });
 
@@ -208,13 +268,8 @@ function createStoryCard(story) {
   const definitionOfDoneCount = Array.isArray(story.definitionOfDone)
     ? story.definitionOfDone.length
     : 0;
-
-  // Calcular esfuerzo total
-  const totalEffort =
-    (story.ux || 0) +
-    (story.design || 0) +
-    (story.front || 0) +
-    (story.back || 0);
+  const tasksCount = Array.isArray(story.tasks) ? story.tasks.length : 0;
+  const points = story.points || 0;
 
   return `
         <article class="story-card" role="button" tabindex="0" aria-label="Ver detalles de ${
@@ -225,7 +280,7 @@ function createStoryCard(story) {
                   story.code || "N/A"
                 )}</span>
                 <span class="story-epic">${escapeHtml(
-                  story.epic || "Sin épica"
+                  story.epic || "Sin epica"
                 )}</span>
                 ${
                   story.sprint
@@ -236,55 +291,20 @@ function createStoryCard(story) {
                 }
             </div>
             <h3 class="story-title">${escapeHtml(
-              story.title || "Sin título"
+              story.title || "Sin titulo"
             )}</h3>
             <p class="story-description">${escapeHtml(
-              story.description || "Sin descripción"
+              story.description || "Sin descripcion"
             )}</p>
             <div class="story-footer">
-                <span class="badge">
-                    ${acceptanceCriteriaCount} criterios
-                </span>
-                <span class="badge">
-                    ${definitionOfDoneCount} DoD
-                </span>
+                <span class="badge">${acceptanceCriteriaCount} criterios</span>
+                <span class="badge">${definitionOfDoneCount} DoD</span>
+                ${tasksCount > 0 ? `<span class="badge" style="background: var(--primary-color); color: white;">${tasksCount} tareas</span>` : ""}
             </div>
-            ${
-              totalEffort > 0
-                ? `
-            <div class="story-effort" style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--border-color); display: grid; grid-template-columns: repeat(5, 1fr); gap: 0.5rem; font-size: 0.75rem;">
-                <div style="text-align: center;">
-                    <div style="color: var(--text-secondary); font-weight: 600;">UX</div>
-                    <div style="color: var(--text-primary); font-weight: 700; margin-top: 0.25rem;">${
-                      story.ux || 0
-                    }</div>
-                </div>
-                <div style="text-align: center;">
-                    <div style="color: var(--text-secondary); font-weight: 600;">Design</div>
-                    <div style="color: var(--text-primary); font-weight: 700; margin-top: 0.25rem;">${
-                      story.design || 0
-                    }</div>
-                </div>
-                <div style="text-align: center;">
-                    <div style="color: var(--text-secondary); font-weight: 600;">Front</div>
-                    <div style="color: var(--text-primary); font-weight: 700; margin-top: 0.25rem;">${
-                      story.front || 0
-                    }</div>
-                </div>
-                <div style="text-align: center;">
-                    <div style="color: var(--text-secondary); font-weight: 600;">Back</div>
-                    <div style="color: var(--text-primary); font-weight: 700; margin-top: 0.25rem;">${
-                      story.back || 0
-                    }</div>
-                </div>
-                <div style="text-align: center; background: var(--primary-color); color: white; border-radius: 4px; padding: 0.25rem;">
-                    <div style="font-weight: 600;">Total</div>
-                    <div style="font-weight: 700; margin-top: 0.25rem;">${totalEffort}</div>
-                </div>
+            <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid var(--border-color); display: flex; align-items: center; justify-content: space-between; font-size: 0.8rem;">
+                <span style="color: var(--text-secondary);">Responsable: <strong style="color: var(--text-primary);">${escapeHtml(story.assignedTo || "N/A")}</strong></span>
+                <span style="background: var(--primary-color); color: white; border-radius: 4px; padding: 0.2rem 0.6rem; font-weight: 700;">${points} pts</span>
             </div>
-            `
-                : ""
-            }
         </article>
     `;
 }
@@ -386,25 +406,36 @@ function openModal(story) {
   const definitionOfDone = Array.isArray(story.definitionOfDone)
     ? story.definitionOfDone
     : [];
+  const tasks = Array.isArray(story.tasks) ? story.tasks : [];
 
-  const totalEffort =
-    (story.ux || 0) +
-    (story.design || 0) +
-    (story.front || 0) +
-    (story.back || 0);
+  const points = story.points || 0;
+
+  const tasksHTML = tasks.length > 0
+    ? `<div style="margin-bottom:1.5rem;">
+        <h3 style="color:var(--text-primary);margin:0 0 0.75rem 0;font-size:1.25rem;">Tareas</h3>
+        <div style="display:flex;flex-direction:column;gap:0.5rem;">
+          ${tasks.map((t) => `
+            <div style="display:grid;grid-template-columns:80px 1fr 160px;gap:0.5rem;padding:0.5rem 0.75rem;background:var(--bg-secondary);border-radius:6px;align-items:center;font-size:0.82rem;">
+              <span style="font-family:monospace;color:var(--text-secondary);font-weight:600;">${escapeHtml(t.id || "")}</span>
+              <span style="color:var(--text-primary);">${escapeHtml(t.title || "")}</span>
+              <span style="color:var(--text-secondary);text-align:right;">${escapeHtml(t.assignedTo || "")} <em style="font-style:italic;">(${escapeHtml(t.role || "")})</em></span>
+            </div>`).join("")}
+        </div>
+       </div>`
+    : "";
 
   const modalContent = `
     <div style="padding: 2rem;">
       <div style="margin-bottom: 1.5rem;">
         <h2 style="margin: 0 0 0.5rem 0; color: var(--text-primary); font-size: 1.75rem;">${escapeHtml(
           story.code || "N/A"
-        )} - ${escapeHtml(story.title || "Sin título")}</h2>
+        )} - ${escapeHtml(story.title || "Sin titulo")}</h2>
         <div style="display: flex; gap: 0.75rem; margin-top: 0.75rem; flex-wrap: wrap;">
           <span style="background: var(--primary-color); color: white; padding: 0.25rem 0.75rem; border-radius: 6px; font-size: 0.875rem;">${escapeHtml(
             story.code || "N/A"
           )}</span>
           <span style="background: var(--border-color); color: var(--text-primary); padding: 0.25rem 0.75rem; border-radius: 6px; font-size: 0.875rem;">${escapeHtml(
-            story.epic || "Sin épica"
+            story.epic || "Sin epica"
           )}</span>
           ${
             story.sprint
@@ -413,65 +444,21 @@ function openModal(story) {
                 )}</span>`
               : ""
           }
+          <span style="background: var(--primary-color); color: white; padding: 0.25rem 0.75rem; border-radius: 6px; font-size: 0.875rem; font-weight: 700;">${points} pts</span>
+          ${story.assignedTo ? `<span style="padding: 0.25rem 0.75rem; border-radius: 6px; font-size: 0.875rem; border: 1px solid var(--border-color); color: var(--text-secondary);">Responsable: ${escapeHtml(story.assignedTo)}</span>` : ""}
         </div>
       </div>
-      
-      ${
-        totalEffort > 0
-          ? `
-      <div style="margin-bottom: 1.5rem; padding: 1.5rem; background: var(--background-secondary); border-radius: 8px;">
-        <h3 style="color: var(--text-primary); margin: 0 0 1rem 0; font-size: 1.25rem;">Esfuerzo Estimado (Story Points)</h3>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 1rem;">
-          <div style="text-align: center; padding: 1rem; background: var(--background-primary); border-radius: 6px; border: 2px solid var(--border-color);">
-            <div style="color: var(--text-secondary); font-size: 0.875rem; font-weight: 600; margin-bottom: 0.5rem;">UX</div>
-            <div style="color: var(--primary-color); font-size: 1.5rem; font-weight: 700;">${
-              story.ux || 0
-            }</div>
-            <div style="color: var(--text-secondary); font-size: 0.75rem; margin-top: 0.25rem;">pts</div>
-          </div>
-          <div style="text-align: center; padding: 1rem; background: var(--background-primary); border-radius: 6px; border: 2px solid var(--border-color);">
-            <div style="color: var(--text-secondary); font-size: 0.875rem; font-weight: 600; margin-bottom: 0.5rem;">Design</div>
-            <div style="color: var(--primary-color); font-size: 1.5rem; font-weight: 700;">${
-              story.design || 0
-            }</div>
-            <div style="color: var(--text-secondary); font-size: 0.75rem; margin-top: 0.25rem;">pts</div>
-          </div>
-          <div style="text-align: center; padding: 1rem; background: var(--background-primary); border-radius: 6px; border: 2px solid var(--border-color);">
-            <div style="color: var(--text-secondary); font-size: 0.875rem; font-weight: 600; margin-bottom: 0.5rem;">Frontend</div>
-            <div style="color: var(--primary-color); font-size: 1.5rem; font-weight: 700;">${
-              story.front || 0
-            }</div>
-            <div style="color: var(--text-secondary); font-size: 0.75rem; margin-top: 0.25rem;">pts</div>
-          </div>
-          <div style="text-align: center; padding: 1rem; background: var(--background-primary); border-radius: 6px; border: 2px solid var(--border-color);">
-            <div style="color: var(--text-secondary); font-size: 0.875rem; font-weight: 600; margin-bottom: 0.5rem;">Backend</div>
-            <div style="color: var(--primary-color); font-size: 1.5rem; font-weight: 700;">${
-              story.back || 0
-            }</div>
-            <div style="color: var(--text-secondary); font-size: 0.75rem; margin-top: 0.25rem;">pts</div>
-          </div>
-          <div style="text-align: center; padding: 1rem; background: var(--primary-color); color: white; border-radius: 6px; border: 2px solid var(--primary-color);">
-            <div style="font-size: 0.875rem; font-weight: 600; margin-bottom: 0.5rem;">Total</div>
-            <div style="font-size: 1.5rem; font-weight: 700;">${totalEffort}</div>
-            <div style="font-size: 0.75rem; margin-top: 0.25rem;">pts</div>
-          </div>
-        </div>
-      </div>
-      `
-          : ""
-      }
-      
-      
+
       <div style="margin-bottom: 1.5rem;" id="description-section">
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
-          <h3 id="description-title" style="color: var(--text-primary); margin: 0; font-size: 1.25rem;">Descripción</h3>
-          <button 
+          <h3 id="description-title" style="color: var(--text-primary); margin: 0; font-size: 1.25rem;">Descripcion</h3>
+          <button
             class="copy-description-btn"
             style="padding: 0.5rem; background: var(--primary-color); color: white; border: none; border-radius: 4px; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px;"
             onmouseover="this.style.background='var(--accent-color)'; this.style.transform='scale(1.1)';"
             onmouseout="this.style.background='var(--primary-color)'; this.style.transform='scale(1)';"
             onclick="copyDescriptionSection(this)"
-            title="Copiar descripción">
+            title="Copiar descripcion">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
               <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -479,12 +466,14 @@ function openModal(story) {
           </button>
         </div>
         <p id="description-content" style="color: var(--text-secondary); line-height: 1.8; margin: 0; white-space: pre-line;">${escapeHtml(
-          story.description || "Sin descripción disponible"
+          story.description || "Sin descripcion disponible"
         )}</p>
       </div>
-      
+
+      ${tasksHTML}
+
       <div style="margin-bottom: 1.5rem;">
-        <h3 style="color: var(--text-primary); margin: 0 0 0.75rem 0; font-size: 1.25rem;">Criterios de Aceptación</h3>
+        <h3 style="color: var(--text-primary); margin: 0 0 0.75rem 0; font-size: 1.25rem;">Criterios de Aceptacion</h3>
         ${
           acceptanceCriteria.length > 0
             ? `
@@ -497,8 +486,8 @@ function openModal(story) {
                     <span style="position: absolute; left: 0; top: 0; color: var(--primary-color); font-weight: 600;">•</span>
                     ${escapeHtml(criterion)}
                   </span>
-                  <button 
-                    class="copy-criterion-btn" 
+                  <button
+                    class="copy-criterion-btn"
                     data-text="${escapeHtml(criterion)}"
                     style="flex-shrink: 0; padding: 0.5rem; background: var(--primary-color); color: white; border: none; border-radius: 4px; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px;"
                     onmouseover="this.style.background='var(--accent-color)'; this.style.transform='scale(1.1)';"
@@ -518,20 +507,20 @@ function openModal(story) {
             .join("")}
         </ul>
         `
-            : '<p style="color: var(--text-secondary); margin: 0;">No hay criterios de aceptación definidos.</p>'
+            : '<p style="color: var(--text-secondary); margin: 0;">No hay criterios de aceptacion definidos.</p>'
         }
       </div>
-      
+
       <div id="dod-section">
         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.75rem;">
-          <h3 id="dod-title" style="color: var(--text-primary); margin: 0; font-size: 1.25rem;">Definición de Hecho</h3>
-          <button 
+          <h3 id="dod-title" style="color: var(--text-primary); margin: 0; font-size: 1.25rem;">Definicion de Hecho</h3>
+          <button
             class="copy-dod-btn"
             style="padding: 0.5rem; background: var(--primary-color); color: white; border: none; border-radius: 4px; cursor: pointer; transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px;"
             onmouseover="this.style.background='var(--accent-color)'; this.style.transform='scale(1.1)';"
             onmouseout="this.style.background='var(--primary-color)'; this.style.transform='scale(1)';"
             onclick="copyDoDSection(this)"
-            title="Copiar definición de hecho">
+            title="Copiar definicion de hecho">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
               <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
@@ -550,7 +539,7 @@ function openModal(story) {
             .join("")}
         </ul>
         `
-            : '<p id="dod-content" style="color: var(--text-secondary); margin: 0;">No hay definición de hecho disponible.</p>'
+            : '<p id="dod-content" style="color: var(--text-secondary); margin: 0;">No hay definicion de hecho disponible.</p>'
         }
       </div>
     </div>

@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Distribucion del equipo por sprints - SILTGOV Sistema Integrado de Liquidaciones"
+      content="Equipo de desarrollo ClustLayer - SILTGOV Sistema Integrado de Liquidaciones"
     />
-    <title>Distribucion por Sprints - SILTGOV</title>
+    <title>Equipo de Trabajo - SILTGOV</title>
     <link rel="stylesheet" href="../styles/user_stories.css" />
-    <link rel="stylesheet" href="../styles/team_distribution.css" />
+    <link rel="stylesheet" href="../styles/team_members.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -23,7 +23,7 @@
         <div class="header-content">
           <h1 class="logo">
             <span class="logo-icon"></span>
-            Distribucion por Sprints
+            Equipo de Trabajo
           </h1>
           <div class="project-info">
             <span class="project-name">SILTGOV</span>
@@ -51,31 +51,19 @@
     <main class="main">
       <div class="container">
 
-        <!-- Resumen del proyecto -->
-        <section class="info-section">
-          <p class="info-description" id="team-description"></p>
-        </section>
-
-        <!-- Error State -->
+        <!-- Error state -->
         <div id="error-state" class="error-state" hidden role="alert">
           <h2>Error al cargar informacion</h2>
           <p id="error-message"></p>
         </div>
 
-        <!-- Metricas generales -->
-        <section id="metrics-section" hidden>
-          <div id="metrics-container"></div>
-        </section>
+        <!-- Team hero -->
+        <div id="team-hero" hidden></div>
 
-        <!-- Distribucion por sprints -->
-        <section class="sprints-section">
-          <h2 class="section-title">Historias y Tareas por Sprint</h2>
-          <p class="section-description" id="sprints-subtitle">
-            Planificacion de 12 semanas - cada historia con sus tareas y asignaciones
-          </p>
-          <div id="sprints-container" class="sprints-container">
-            <!-- Se carga dinamicamente -->
-          </div>
+        <!-- Members section -->
+        <section id="members-section" hidden>
+          <h2 class="members-section-title">Integrantes del Equipo</h2>
+          <div id="members-grid" class="members-grid"></div>
         </section>
 
       </div>
@@ -84,11 +72,11 @@
     <footer class="footer">
       <div class="container">
         <p>&copy; 2025 SILTGOV - Sistema Integrado de Liquidaciones del Gobierno</p>
-        <p>Equipo ClustLayer - metodologia agil Scrum</p>
+        <p>Desarrollado por ClustLayer - Dev on time</p>
       </div>
     </footer>
 
-    <script src="../data/team_data.js"></script>
-    <script src="../scripts/team_distribution.js"></script>
+    <script src="../data/team_members_data.js"></script>
+    <script src="../scripts/team_members.js"></script>
   </body>
 </html>

@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Visualizador de Historias de Usuario para el Proyecto Finanz"
+      content="Visualizador de Historias de Usuario - SILTGOV Sistema Integrado de Liquidaciones"
     />
-    <title>Historias de Usuario - Finanz</title>
+    <title>Historias de Usuario - SILTGOV</title>
     <link rel="stylesheet" href="../styles/user_stories.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -25,7 +25,7 @@
             Historias de Usuario
           </h1>
           <div class="project-info">
-            <span class="project-name">Finanz</span>
+            <span class="project-name">SILTGOV</span>
           </div>
           <div style="display: flex; gap: 0.5rem; align-items: center">
             <a
@@ -57,7 +57,7 @@
               type="text"
               id="search-input"
               class="search-input"
-              placeholder="🔍 Buscar por título, código o descripción..."
+              placeholder="Buscar por titulo, codigo o descripcion..."
               aria-describedby="search-help"
             />
             <span id="search-help" class="sr-only"
@@ -80,13 +80,18 @@
             >
             <select id="sprint-filter" class="sprint-filter epic-filter">
               <option value="all">Todos los sprints</option>
-              <option value="S1">Sprint 1 - MVP Acceso y Público Básico</option>
-              <option value="S2">Sprint 2 - Finanzas básicas</option>
-              <option value="S3">
-                Sprint 3 - Valor agregado (Reportes e IA)
-              </option>
-              <option value="S4">Sprint 4 - Experiencia avanzada</option>
-              <option value="S5">Sprint 5 - Administración y robustez</option>
+              <option value="S1">S1 - Infraestructura base</option>
+              <option value="S2">S2 - Autenticacion y seguridad</option>
+              <option value="S3">S3 - Gestion de entidades</option>
+              <option value="S4">S4 - Sentencias judiciales</option>
+              <option value="S5">S5 - Liquidaciones I</option>
+              <option value="S6">S6 - Liquidaciones II</option>
+              <option value="S7">S7 - Flujo de pagos</option>
+              <option value="S8">S8 - Documentos y PDFs</option>
+              <option value="S9">S9 - Reportes y auditoria</option>
+              <option value="S10">S10 - UX avanzada</option>
+              <option value="S11">S11 - Optimizacion y seguridad avanzada</option>
+              <option value="S12">S12 - Cierre y despliegue</option>
             </select>
           </div>
 
@@ -110,13 +115,11 @@
           </div>
 
           <div id="empty-state" class="empty-state" hidden>
-            <span class="empty-icon">🔍</span>
             <h2>No se encontraron historias</h2>
-            <p>Intenta con otros criterios de búsqueda o filtro.</p>
+            <p>Intenta con otros criterios de busqueda o filtro.</p>
           </div>
 
           <div id="error-state" class="error-state" hidden role="alert">
-            <span class="error-icon">⚠️</span>
             <h2>Error al cargar historias</h2>
             <p id="error-message"></p>
             <button id="retry-button" class="retry-button">Reintentar</button>
@@ -127,8 +130,8 @@
 
     <footer class="footer">
       <div class="container">
-        <p>&copy; 2025 Finanz - Gestor de Finanzas Personales</p>
-        <p>Generado con ❤️ para gestión ágil de proyectos</p>
+        <p>&copy; 2025 SILTGOV - Sistema Integrado de Liquidaciones del Gobierno</p>
+        <p>Planificacion agil Scrum - Equipo ClustLayer</p>
       </div>
     </footer>
 

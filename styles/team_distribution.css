@@ -414,3 +414,260 @@
     gap: 1rem;
   }
 }
+
+/* ===================================
+   SILTGOV - Sprint Metric Cards
+   =================================== */
+.sprint-metric-card {
+  background: var(--card-bg, var(--bg-primary));
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.sprint-metric-value {
+  display: block;
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--primary-color);
+  line-height: 1;
+}
+
+.sprint-metric-label {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 0.35rem;
+}
+
+/* ===================================
+   SILTGOV - Sprint Card (flat layout)
+   =================================== */
+.sprint-card {
+  background: var(--card-bg, var(--bg-primary));
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.sprint-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  gap: 1rem;
+}
+
+.sprint-card-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.sprint-card-name {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 0.25rem 0;
+}
+
+.sprint-card-goal {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin: 0 0 0.25rem 0;
+  line-height: 1.5;
+}
+
+.sprint-team-note {
+  font-size: 0.8rem;
+  color: var(--primary-color);
+  font-style: italic;
+  margin: 0.25rem 0 0 0;
+}
+
+.sprint-card-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.4rem;
+  flex-shrink: 0;
+}
+
+.sprint-pts-badge {
+  display: inline-block;
+  padding: 0.3rem 0.75rem;
+  background: var(--primary-color);
+  color: white;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.sprint-duration {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+/* ===================================
+   SILTGOV - Story Block
+   =================================== */
+.sprint-stories {
+  padding: 1rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.story-block {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.story-block-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.story-block-code {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  background: var(--primary-color);
+  color: white;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.story-block-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  flex: 1;
+  min-width: 120px;
+}
+
+.story-block-pts {
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  background: var(--bg-primary);
+  color: var(--primary-color);
+  border: 1px solid var(--primary-color);
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.story-block-assignee {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+/* ===================================
+   SILTGOV - Task Table
+   =================================== */
+.story-tasks {
+  padding: 0.5rem 1rem 0.75rem;
+}
+
+.tasks-header {
+  display: grid;
+  grid-template-columns: 80px 1fr 150px 130px;
+  gap: 0.5rem;
+  padding: 0.4rem 0.5rem;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 0.25rem;
+}
+
+.tasks-col {
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.task-row {
+  display: grid;
+  grid-template-columns: 80px 1fr 150px 130px;
+  gap: 0.5rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: 4px;
+  align-items: center;
+}
+
+.task-row:nth-child(odd) {
+  background: var(--bg-secondary);
+}
+
+.task-id {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-family: monospace;
+}
+
+.task-title {
+  font-size: 0.8rem;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
+.task-assignee {
+  font-size: 0.78rem;
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.task-role-badge {
+  font-size: 0.7rem;
+  padding: 0.18rem 0.5rem;
+  border-radius: 20px;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  text-align: center;
+}
+
+.no-tasks,
+.no-stories {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  font-style: italic;
+  margin: 0.5rem 0;
+  padding: 0.5rem 1rem;
+}
+
+@media (max-width: 600px) {
+  .tasks-header,
+  .task-row {
+    grid-template-columns: 60px 1fr;
+  }
+  .tasks-col-assignee,
+  .tasks-col-role,
+  .task-assignee,
+  .task-role-badge {
+    display: none;
+  }
+  .sprint-card-header {
+    flex-direction: column;
+  }
+  .sprint-card-meta {
+    align-items: flex-start;
+    flex-direction: row;
+    gap: 0.75rem;
+  }
+}
