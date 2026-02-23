@@ -386,7 +386,14 @@ body {
 
 .legal-item-header:hover { background: var(--color-hover, #f3f4f6); }
 
-.legal-item-icon { font-size: 1.3rem; }
+.legal-item-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+}
 
 .legal-item-title {
   flex: 1;
@@ -449,7 +456,6 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.4rem;
   flex-shrink: 0;
 }
 
@@ -521,17 +527,23 @@ body {
   background: var(--color-surface);
   border: 2px solid var(--color-border);
   border-radius: 10px;
-  padding: 1rem 1.2rem;
+  padding: 1rem 0.2rem;
   text-align: center;
   min-width: 140px;
-  flex-shrink: 0;
+
   transition: transform 0.15s;
 }
 
 .state-card:hover { transform: translateY(-2px); }
 
-.state-card-icon { font-size: 1.8rem; margin-bottom: 0.3rem; }
-.state-card-name { font-size: 0.9rem; font-weight: 700; color: var(--color-text); }
+.state-card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.4rem;
+  height: 24px;
+}
+.state-card-name { font-size: 1rem; font-weight: 700; color: var(--color-text); }
 .state-card-desc { font-size: 0.75rem; color: var(--color-muted); margin-top: 0.2rem; }
 
 .state-arrow {
@@ -585,7 +597,13 @@ body {
 
 .arch-service-box:hover { transform: translateY(-2px); }
 
-.arch-service-icon { font-size: 1.5rem; margin-bottom: 0.25rem; }
+.arch-service-icon {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.35rem;
+  height: 24px;
+  justify-content: center;
+}
 
 .arch-service-name {
   font-size: 0.88rem;
@@ -646,7 +664,13 @@ body {
 
 .infra-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
 
-.infra-card-icon { font-size: 1.6rem; margin-bottom: 0.3rem; }
+.infra-card-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.35rem;
+  height: 24px;
+}
 .infra-card-name { font-size: 0.85rem; font-weight: 700; color: var(--color-text); }
 .infra-card-role { font-size: 0.75rem; color: var(--color-muted); margin-top: 0.15rem; }
 
@@ -671,9 +695,13 @@ body {
 .security-card:hover { transform: translateX(3px); }
 
 .security-card-icon {
-  font-size: 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
   margin-top: 0.1rem;
+  width: 22px;
+  height: 22px;
 }
 
 .security-card-title {
@@ -730,7 +758,11 @@ body {
 
 .link-card:hover::after { color: var(--color-primary); }
 
-.link-card-icon { font-size: 1.8rem; }
+.link-card-icon {
+  display: flex;
+  align-items: center;
+  height: 24px;
+}
 
 .link-card-label {
   font-size: 0.92rem;
@@ -771,9 +803,10 @@ body {
 .legal-item-icon svg,
 .role-card-avatar svg,
 .state-card-icon svg {
-  width: 100%;
-  height: 100%;
+  width: 20px;
+  height: 20px;
   display: block;
+  flex-shrink: 0;
 }
 
 /* ── Scope label icons ───────────────────────────────────────── */
