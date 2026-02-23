@@ -1,6 +1,6 @@
 /**
- * Pagina Principal - SILTGOV
- * @description Script para la pagina de inicio con gestion de tema
+ * Página Principal - Finanz
+ * @description Script para la página de inicio con gestión de tema
  */
 
 // ==================== Estado de la aplicación ====================

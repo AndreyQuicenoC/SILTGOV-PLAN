@@ -627,32 +627,3 @@ body {
     padding: 1rem;
   }
 }
-
-/* ==================== Jira Export Button ==================== */
-.jira-export-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  background: var(--bg-secondary);
-  border: 1.5px solid var(--primary-color);
-  color: var(--primary-color);
-  padding: 0.45rem 1rem;
-  border-radius: 6px;
-  font-size: 0.82rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.18s, color 0.18s, border-color 0.18s, transform 0.12s;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-.jira-export-btn:hover {
-  background: var(--primary-color);
-  color: #fff;
-  transform: translateY(-1px);
-  box-shadow: 0 3px 10px rgba(99,102,241,0.25);
-}
-
-.jira-export-btn:active {
-  transform: translateY(0);
-}
