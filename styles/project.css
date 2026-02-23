@@ -198,7 +198,18 @@ body {
 }
 
 .section-title .section-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
   font-size: 1.3rem;
+  flex-shrink: 0;
+}
+
+.section-title .section-icon svg {
+  width: 1.4rem;
+  height: 1.4rem;
 }
 
 .section-divider {
@@ -292,10 +303,16 @@ body {
 }
 
 .objective-card-icon {
-  font-size: 2.5rem;
   opacity: 0.35;
   align-self: flex-end;
-  margin-top: -1rem;
+  margin-top: -0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.objective-card-icon svg {
+  width: 2rem;
+  height: 2rem;
 }
 
 .carousel-controls {
@@ -744,4 +761,41 @@ body {
   .state-arrow { transform: rotate(90deg); }
   .arch-services-row { flex-direction: column; }
   .links-grid { grid-template-columns: 1fr; }
+}
+
+/* ── SVG icon sizing across all icon containers ──────────────── */
+.arch-service-icon svg,
+.infra-card-icon svg,
+.link-card-icon svg,
+.security-card-icon svg,
+.legal-item-icon svg,
+.role-card-avatar svg,
+.state-card-icon svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ── Scope label icons ───────────────────────────────────────── */
+.label-icon {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 0.2rem;
+  flex-shrink: 0;
+}
+
+.label-icon--ok { color: #22c55e; }
+.label-icon--no { color: #ef4444; }
+
+.info-card-label {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* ── Brand icon ──────────────────────────────────────────────── */
+.brand-icon {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 0.1rem;
 }
