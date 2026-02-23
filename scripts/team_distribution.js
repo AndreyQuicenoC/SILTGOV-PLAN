@@ -36,6 +36,90 @@ function updateThemeIcon() {
   if (icon) icon.textContent = currentTheme === "light" ? "Oscuro" : "Claro";
 }
 
+// ==================== Task Counters ====================
+/**
+ * Calcula el numero de tareas asignadas a cada desarrollador
+ * @param {Array} sprints - Array de sprints
+ * @returns {Object} { overall: {dev: count, ...}, perSprint: {sprintId: {dev: count, ...}, ...} }
+ */
+function calcTaskCounters(sprints) {
+  const overall = {};
+  const perSprint = {};
+
+  sprints.forEach((sprint) => {
+    const sprintKey = sprint.id || sprint.name;
+    perSprint[sprintKey] = {};
+
+    (sprint.stories || []).forEach((story) => {
+      (story.tasks || []).forEach((task) => {
+        const dev = task.assignedTo || "Sin asignar";
+        overall[dev] = (overall[dev] || 0) + 1;
+        perSprint[sprintKey][dev] = (perSprint[sprintKey][dev] || 0) + 1;
+      });
+    });
+  });
+
+  return { overall, perSprint };
+}
+
+/**
+ * Genera el HTML de la tabla de contadores por desarrollador
+ * @param {Object} counts - { dev: taskCount }
+ * @param {number} totalTasks - Total de tareas para calcular el porcentaje
+ */
+function renderCounterTable(counts, totalTasks) {
+  const devColors = {
+    "Juan Francesco Garcia": "#3B82F6",
+    "Ivan Ausecha":          "#10B981",
+    "Adolfo Andrey Quiceno": "#8B5CF6",
+  };
+
+  const sortedDevs = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+
+  return `
+    <div class="task-counter-table">
+      ${sortedDevs
+        .map(([dev, count]) => {
+          const pct = totalTasks > 0 ? Math.round((count / totalTasks) * 100) : 0;
+          const color = devColors[dev] || "#64748b";
+          const shortName = dev.split(" ")[0] + " " + (dev.split(" ").pop() || "");
+          return `
+            <div class="task-counter-row">
+              <span class="task-counter-dev" title="${escapeHtml(dev)}">${escapeHtml(shortName)}</span>
+              <div class="task-counter-bar-wrap">
+                <div class="task-counter-bar" style="width:${pct}%;background:${color}"></div>
+              </div>
+              <span class="task-counter-count" style="color:${color}">${count}</span>
+              <span class="task-counter-pct">${pct}%</span>
+            </div>`;
+        })
+        .join("")}
+    </div>
+  `;
+}
+
+/**
+ * Renderiza el resumen global de tareas por desarrollador
+ * @param {Object} overall - { dev: taskCount }
+ */
+function renderGlobalCounters(overall) {
+  const container = document.getElementById("global-task-counters");
+  if (!container) return;
+
+  const totalTasks = Object.values(overall).reduce((a, b) => a + b, 0);
+
+  container.innerHTML = `
+    <div class="counter-card">
+      <div class="counter-card-header">
+        <span class="counter-card-title">📊 Distribución de tareas — Proyecto completo</span>
+        <span class="counter-card-total">${totalTasks} tareas totales</span>
+      </div>
+      ${renderCounterTable(overall, totalTasks)}
+    </div>
+  `;
+  container.hidden = false;
+}
+
 // ==================== Funciones de render ====================
 function renderMetrics(data) {
   const sec = document.getElementById("metrics-section");
@@ -103,11 +187,22 @@ function renderStoryBlock(story) {
   `;
 }
 
-function renderSprintCard(sprint) {
+function renderSprintCard(sprint, sprintCounts) {
   const stories = Array.isArray(sprint.stories) ? sprint.stories : [];
   const storiesHTML = stories.length > 0
     ? stories.map(renderStoryBlock).join("")
     : `<p class="no-stories">Sin historias asignadas.</p>`;
+
+  const sprintKey = sprint.id || sprint.name;
+  const counts = sprintCounts[sprintKey] || {};
+  const totalSprintTasks = Object.values(counts).reduce((a, b) => a + b, 0);
+
+  const counterHTML = totalSprintTasks > 0
+    ? `<div class="sprint-task-counter">
+        <span class="sprint-counter-label">Tareas: ${totalSprintTasks}</span>
+        ${renderCounterTable(counts, totalSprintTasks)}
+       </div>`
+    : "";
 
   return `
     <div class="sprint-card" style="border-left: 4px solid ${escapeHtml(sprint.color || "#64748b")}">
@@ -122,6 +217,7 @@ function renderSprintCard(sprint) {
           <span class="sprint-duration">${escapeHtml(sprint.duration || "")}</span>
         </div>
       </div>
+      ${counterHTML}
       <div class="sprint-stories">
         ${storiesHTML}
       </div>
@@ -151,16 +247,21 @@ function init() {
 
     renderMetrics(TEAM_DATA);
 
+    const sprints = Array.isArray(TEAM_DATA.sprints) ? TEAM_DATA.sprints : [];
+
+    // Calculate and render task counters
+    const { overall, perSprint } = calcTaskCounters(sprints);
+    renderGlobalCounters(overall);
+
     const container = document.getElementById("sprints-container");
     if (!container) throw new Error("Contenedor de sprints no encontrado.");
 
-    const sprints = Array.isArray(TEAM_DATA.sprints) ? TEAM_DATA.sprints : [];
     if (sprints.length === 0) {
       container.innerHTML = "<p>No hay sprints definidos.</p>";
       return;
     }
 
-    container.innerHTML = sprints.map(renderSprintCard).join("");
+    container.innerHTML = sprints.map((sprint) => renderSprintCard(sprint, perSprint)).join("");
 
   } catch (err) {
     console.error("Error en team_distribution:", err);

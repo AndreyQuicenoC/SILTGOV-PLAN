@@ -67,6 +67,10 @@ function setupEventListeners() {
   elements.sprintFilter.addEventListener("change", handleSprintFilter);
   elements.retryButton.addEventListener("click", loadStories);
 
+  // Jira export button
+  const jiraBtn = document.getElementById("jira-export-btn");
+  if (jiraBtn) jiraBtn.addEventListener("click", exportToJiraCSV);
+
   // Event listeners del modal
   elements.modalOverlay.addEventListener("click", closeModal);
   document.addEventListener("keydown", (e) => {
@@ -707,6 +711,105 @@ function showCopyFeedback(button, success) {
     button.innerHTML = originalContent;
     button.style.background = originalBg;
   }, 1500);
+}
+
+// ==================== Exportacion a Jira ====================
+/**
+ * Escapa un valor para CSV (envuelve en comillas si contiene comas, comillas o saltos de linea)
+ * @param {string|number} value
+ * @returns {string}
+ */
+function csvEscape(value) {
+  const str = String(value == null ? "" : value)
+    .replace(/\r?\n/g, " | ")   // saltos de linea → separador visual
+    .replace(/"/g, '""');        // comillas → doble comilla (estandar CSV)
+  return `"${str}"`;
+}
+
+/**
+ * Exporta las historias actualmente visibles a un CSV compatible con Jira.
+ * El CSV puede importarse en Jira mediante la funcion de importacion de CSV del proyecto.
+ *
+ * Columnas exportadas (orden Jira estándar):
+ *   Summary | Issue Type | Status | Priority | Story Points | Sprint | Epic Name |
+ *   Assignee | Description | Acceptance Criteria | Definition of Done
+ */
+function exportToJiraCSV() {
+  const stories = state.filteredStories;
+  if (!stories || stories.length === 0) {
+    alert("No hay historias para exportar. Ajusta los filtros e intenta de nuevo.");
+    return;
+  }
+
+  const headers = [
+    "Summary",
+    "Issue Type",
+    "Status",
+    "Priority",
+    "Story Points",
+    "Sprint",
+    "Epic Name",
+    "Assignee",
+    "Description",
+    "Acceptance Criteria",
+    "Definition of Done",
+  ];
+
+  const rows = stories.map((story) => {
+    const acceptanceCriteria = Array.isArray(story.acceptanceCriteria)
+      ? story.acceptanceCriteria.join(" | ")
+      : (story.acceptanceCriteria || "");
+
+    const definitionOfDone = Array.isArray(story.definitionOfDone)
+      ? story.definitionOfDone.join(" | ")
+      : (story.definitionOfDone || "");
+
+    const description = (story.description || "")
+      .replace(/\r?\n/g, " ");
+
+    return [
+      csvEscape(`[${story.code}] ${story.title}`),
+      csvEscape("Story"),
+      csvEscape("To Do"),
+      csvEscape("Medium"),
+      csvEscape(story.points || 0),
+      csvEscape(story.sprint || ""),
+      csvEscape((story.epic || "").replace(/^E-\d+\s+/, "")),
+      csvEscape(story.assignedTo || ""),
+      csvEscape(description),
+      csvEscape(acceptanceCriteria),
+      csvEscape(definitionOfDone),
+    ].join(",");
+  });
+
+  const csvContent = [headers.join(","), ...rows].join("\r\n");
+
+  // BOM UTF-8 para que Excel abra el CSV correctamente
+  const bom = "\uFEFF";
+  const blob = new Blob([bom + csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = `SILTGOV-jira-export-${new Date().toISOString().split("T")[0]}.csv`;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+
+  // Feedback visual en el boton
+  const btn = document.getElementById("jira-export-btn");
+  if (btn) {
+    const original = btn.textContent;
+    btn.textContent = "✓ Exportado!";
+    btn.style.background = "#10b981";
+    btn.style.color = "#fff";
+    setTimeout(() => {
+      btn.textContent = original;
+      btn.style.background = "";
+      btn.style.color = "";
+    }, 2000);
+  }
 }
 
 // ==================== Inicio de la aplicación ====================
