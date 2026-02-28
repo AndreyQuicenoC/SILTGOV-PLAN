@@ -1,13 +1,14 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Distribucion del equipo por sprints - SILTGOV Sistema Integrado de Liquidaciones"
+      content="Distribucion del equipo de desarrollo y planificacion de sprints del proyecto SILTGOV"
     />
-    <title>Distribucion por Sprints - SILTGOV</title>
+    <title>Distribucion del Equipo - SILTGOV</title>
+    <link rel="icon" type="image/svg+xml" href="../assets/siltgov-icon.svg" />
     <link rel="stylesheet" href="../styles/user_stories.css" />
     <link rel="stylesheet" href="../styles/team_distribution.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -23,7 +24,7 @@
         <div class="header-content">
           <h1 class="logo">
             <span class="logo-icon"></span>
-            Distribucion por Sprints
+            Distribución del Equipo
           </h1>
           <div class="project-info">
             <span class="project-name">SILTGOV</span>
@@ -34,7 +35,7 @@
               class="back-button"
               aria-label="Volver al inicio"
             >
-              <span>&#8592;</span> Inicio
+              <span>←</span> Inicio
             </a>
             <button
               id="theme-toggle"
@@ -50,44 +51,44 @@
 
     <main class="main">
       <div class="container">
-
-        <!-- Resumen del proyecto -->
+        <!-- Información del equipo -->
         <section class="info-section">
-          <p class="info-description" id="team-description"></p>
+          <p class="info-description" id="team-description">
+            <!-- Se cargará desde team_data.js -->
+          </p>
         </section>
 
         <!-- Error State -->
         <div id="error-state" class="error-state" hidden role="alert">
-          <h2>Error al cargar informacion</h2>
+          <h2>Error al cargar información</h2>
           <p id="error-message"></p>
         </div>
 
-        <!-- Metricas generales -->
-        <section id="metrics-section" hidden>
-          <div id="metrics-container"></div>
-        </section>
-
-        <!-- Contadores de tareas por desarrollador (proyecto completo) -->
-        <section id="global-task-counters" hidden aria-label="Distribucion de tareas por desarrollador"></section>
-
-        <!-- Distribucion por sprints -->
-        <section class="sprints-section">
-          <h2 class="section-title">Historias y Tareas por Sprint</h2>
-          <p class="section-description" id="sprints-subtitle">
-            Planificacion de 12 semanas - cada historia con sus tareas y asignaciones
-          </p>
-          <div id="sprints-container" class="sprints-container">
-            <!-- Se carga dinamicamente -->
+        <!-- Roles del equipo -->
+        <section class="roles-section">
+          <h2 class="section-title">Roles del Equipo</h2>
+          <div id="roles-container" class="roles-container">
+            <!-- Se cargará dinámicamente desde team_data.js -->
           </div>
         </section>
 
+        <!-- Sprints del proyecto -->
+        <section class="sprints-section">
+          <h2 class="section-title">Distribución por Sprints</h2>
+          <p class="section-description">
+            Planificación de entregas en 10 semanas (5 sprints de 2 semanas)
+          </p>
+          <div id="sprints-container" class="sprints-container">
+            <!-- Se cargará dinámicamente -->
+          </div>
+        </section>
       </div>
     </main>
 
     <footer class="footer">
       <div class="container">
-        <p>&copy; 2025 SILTGOV - Sistema Integrado de Liquidaciones del Gobierno</p>
-        <p>Equipo ClustLayer - metodologia agil Scrum</p>
+        <p>&copy; 2025 SILTGOV - Sistema Integrado de Liquidaciones</p>
+        <p>Equipo organizado con metodología ágil Scrum</p>
       </div>
     </footer>
 

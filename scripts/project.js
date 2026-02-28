@@ -22,14 +22,13 @@
 
   // ── Render Description Cards ────────────────────────────────
   function renderDescription() {
-    document.getElementById("project-description-text").textContent = D.description;
+    document.getElementById("project-description-text").textContent =
+      D.description;
     document.getElementById("project-context-text").textContent = D.context;
 
     const scopeIn = document.getElementById("scope-in-list");
     if (scopeIn) {
-      scopeIn.innerHTML = D.scope.inScope
-        .map((s) => `<li>${s}</li>`)
-        .join("");
+      scopeIn.innerHTML = D.scope.inScope.map((s) => `<li>${s}</li>`).join("");
     }
     const scopeOut = document.getElementById("scope-out-list");
     if (scopeOut) {
@@ -75,16 +74,21 @@
         <div class="objective-card-num">${s.num}</div>
         <div class="objective-card-text">${s.text}</div>
         <div class="objective-card-icon">${s.icon}</div>
-      </div>`
+      </div>`,
       )
       .join("");
 
     dotsContainer.innerHTML = allSlides
-      .map((_, i) => `<div class="carousel-dot${i === 0 ? " active" : ""}" data-index="${i}"></div>`)
+      .map(
+        (_, i) =>
+          `<div class="carousel-dot${i === 0 ? " active" : ""}" data-index="${i}"></div>`,
+      )
       .join("");
 
     dotsContainer.querySelectorAll(".carousel-dot").forEach((dot) => {
-      dot.addEventListener("click", () => goToSlide(parseInt(dot.dataset.index)));
+      dot.addEventListener("click", () =>
+        goToSlide(parseInt(dot.dataset.index)),
+      );
     });
 
     startAutoplay();
@@ -134,7 +138,7 @@
         <div class="legal-item-body">
           <div class="legal-item-content">${item.content}</div>
         </div>
-      </div>`
+      </div>`,
       )
       .join("");
 
@@ -173,7 +177,7 @@
           <div class="role-restrictions-title">Restricciones</div>
           ${role.restrictions.map((r) => `<div class="role-restriction">${r}</div>`).join("")}
         </div>
-      </div>`
+      </div>`,
       )
       .join("");
   }
@@ -191,7 +195,7 @@
         <div class="state-card-name" style="color:${s.color}">${s.name}</div>
         <div class="state-card-desc">${s.description}</div>
       </div>
-      ${i < D.states.length - 1 ? '<div class="state-arrow">→</div>' : ""}`
+      ${i < D.states.length - 1 ? '<div class="state-arrow">→</div>' : ""}`,
       )
       .join("");
   }
@@ -208,21 +212,65 @@
         .join("");
     }
 
-    const servicesContainer = document.getElementById("arch-services");
-    if (servicesContainer) {
-      servicesContainer.innerHTML = D.architecture.services
+    // Helper to build a row of service boxes from a boxes array
+    function buildBoxesHTML(boxes) {
+      return boxes
         .map(
-          (s) => `
-        <div class="arch-service-box" style="border-color:${s.color}44">
-          <div class="arch-service-icon">${s.icon}</div>
-          <div class="arch-service-name">${s.name}</div>
-          <div class="arch-service-desc">${s.description}</div>
+          (b) => `
+        <div class="arch-service-box" style="border-color:${b.color}44; text-align:center">
+          <div class="arch-service-icon">${b.icon}</div>
+          <div class="arch-service-name">${b.name}</div>
+          <div class="arch-service-desc">${b.description}</div>
           <div class="arch-tech-tags">
-            ${s.tech.map((t) => `<span class="arch-tech-tag">${t}</span>`).join("")}
+            ${b.tech.map((t) => `<span class="arch-tech-tag">${t}</span>`).join("")}
           </div>
-        </div>`
+        </div>`,
         )
         .join("");
+    }
+
+    function buildConnectionRow(label) {
+      return `<div class="arch-connection-row">
+        <span class="arch-connection-arrow">&#8597;</span>
+        <span>${label}</span>
+        <span class="arch-connection-arrow">&#8597;</span>
+      </div>`;
+    }
+
+    function buildLayer(label, boxesHTML) {
+      return `<div class="arch-layer">
+        <div class="arch-layer-label">${label}</div>
+        <div class="arch-services-row">${boxesHTML}</div>
+      </div>`;
+    }
+
+    // Build services HTML for microservices layer
+    const servicesHTML = D.architecture.services
+      .map(
+        (s) => `
+      <div class="arch-service-box" style="border-color:${s.color}44">
+        <div class="arch-service-icon">${s.icon}</div>
+        <div class="arch-service-name">${s.name}</div>
+        <div class="arch-service-desc">${s.description}</div>
+        <div class="arch-tech-tags">
+          ${s.tech.map((t) => `<span class="arch-tech-tag">${t}</span>`).join("")}
+        </div>
+      </div>`,
+      )
+      .join("");
+
+    const diagEl = document.getElementById("arch-diagram");
+    if (diagEl) {
+      const arch = D.architecture;
+      diagEl.innerHTML = [
+        buildLayer(arch.client.label, buildBoxesHTML(arch.client.boxes)),
+        buildConnectionRow(arch.client.connectionLabel),
+        buildLayer(arch.gateway.label, buildBoxesHTML(arch.gateway.boxes)),
+        buildConnectionRow(arch.gateway.connectionLabel),
+        buildLayer(arch.microservicesLabel, servicesHTML),
+        buildConnectionRow(arch.microservicesConnectionLabel),
+        buildLayer(arch.dataLayer.label, buildBoxesHTML(arch.dataLayer.boxes)),
+      ].join("");
     }
 
     const infraContainer = document.getElementById("arch-infra");
@@ -234,7 +282,7 @@
           <div class="infra-card-icon">${item.icon}</div>
           <div class="infra-card-name">${item.name}</div>
           <div class="infra-card-role">${item.role}</div>
-        </div>`
+        </div>`,
         )
         .join("");
     }
@@ -254,7 +302,7 @@
           <div class="security-card-title">${item.measure}</div>
           <div class="security-card-desc">${item.description}</div>
         </div>
-      </div>`
+      </div>`,
       )
       .join("");
   }
@@ -274,12 +322,12 @@
     container.innerHTML = links
       .map(
         (link) => `
-      <a class="link-card" href="${link.url}" target="_blank" rel="noopener">
+      <a class="link-card" href="${link.url}" target="_blank" rel="noopener noreferrer">
         <div class="link-card-icon">${link.icon}</div>
         <div class="link-card-label">${link.label}</div>
         <div class="link-card-desc">${link.description}</div>
         <div class="link-card-url">${link.url}</div>
-      </a>`
+      </a>`,
       )
       .join("");
   }

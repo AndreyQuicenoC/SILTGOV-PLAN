@@ -1,13 +1,14 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Visualizador de Historias de Usuario - SILTGOV Sistema Integrado de Liquidaciones"
+      content="Historias de usuario, epicas y sprints del proyecto SILTGOV - Sistema Integrado de Liquidaciones"
     />
     <title>Historias de Usuario - SILTGOV</title>
+    <link rel="icon" type="image/svg+xml" href="../assets/siltgov-icon.svg" />
     <link rel="stylesheet" href="../styles/user_stories.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -40,7 +41,7 @@
               class="theme-toggle"
               aria-label="Cambiar tema"
             >
-              <span class="theme-icon">Oscuro</span>
+              <span class="theme-icon">🌙</span>
             </button>
           </div>
         </div>
@@ -57,7 +58,7 @@
               type="text"
               id="search-input"
               class="search-input"
-              placeholder="Buscar por titulo, codigo o descripcion..."
+              placeholder="🔍 Buscar por título, código o descripción..."
               aria-describedby="search-help"
             />
             <span id="search-help" class="sr-only"
@@ -80,18 +81,13 @@
             >
             <select id="sprint-filter" class="sprint-filter epic-filter">
               <option value="all">Todos los sprints</option>
-              <option value="S1">S1 - Infraestructura base</option>
-              <option value="S2">S2 - Autenticacion y seguridad</option>
-              <option value="S3">S3 - Gestion de entidades</option>
-              <option value="S4">S4 - Sentencias judiciales</option>
-              <option value="S5">S5 - Liquidaciones I</option>
-              <option value="S6">S6 - Liquidaciones II</option>
-              <option value="S7">S7 - Flujo de pagos</option>
-              <option value="S8">S8 - Documentos y PDFs</option>
-              <option value="S9">S9 - Reportes y auditoria</option>
-              <option value="S10">S10 - UX avanzada</option>
-              <option value="S11">S11 - Optimizacion y seguridad avanzada</option>
-              <option value="S12">S12 - Cierre y despliegue</option>
+              <option value="S1">Sprint 1 - MVP Acceso y Público Básico</option>
+              <option value="S2">Sprint 2 - Finanzas básicas</option>
+              <option value="S3">
+                Sprint 3 - Valor agregado (Reportes e IA)
+              </option>
+              <option value="S4">Sprint 4 - Experiencia avanzada</option>
+              <option value="S5">Sprint 5 - Administración y robustez</option>
             </select>
           </div>
 
@@ -103,15 +99,6 @@
               <strong id="visible-stories">0</strong> mostradas
             </span>
           </div>
-
-          <button
-            id="jira-export-btn"
-            class="jira-export-btn"
-            title="Exportar historias visibles a CSV compatible con Jira"
-            aria-label="Exportar a Jira CSV"
-          >
-            ↓ Exportar a Jira
-          </button>
         </section>
 
         <!-- Lista de historias -->
@@ -124,11 +111,13 @@
           </div>
 
           <div id="empty-state" class="empty-state" hidden>
+            <span class="empty-icon">🔍</span>
             <h2>No se encontraron historias</h2>
-            <p>Intenta con otros criterios de busqueda o filtro.</p>
+            <p>Intenta con otros criterios de búsqueda o filtro.</p>
           </div>
 
           <div id="error-state" class="error-state" hidden role="alert">
+            <span class="error-icon">⚠️</span>
             <h2>Error al cargar historias</h2>
             <p id="error-message"></p>
             <button id="retry-button" class="retry-button">Reintentar</button>
@@ -139,8 +128,8 @@
 
     <footer class="footer">
       <div class="container">
-        <p>&copy; 2025 SILTGOV - Sistema Integrado de Liquidaciones del Gobierno</p>
-        <p>Planificacion agil Scrum - Equipo ClustLayer</p>
+        <p>&copy; 2025 SILTGOV - Sistema Integrado de Liquidaciones</p>
+        <p>Generado con ❤️ para gestión ágil de proyectos</p>
       </div>
     </footer>
 
