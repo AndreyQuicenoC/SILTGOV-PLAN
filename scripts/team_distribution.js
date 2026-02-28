@@ -151,8 +151,8 @@ function renderSprints() {
       return `
       <div class="zone-container" data-sprint-id="${sprintId}">
         <div class="zone-header sprint-header" onclick="handleSprintToggle('${sprintId}')" style="background: linear-gradient(135deg, ${
-        sprint.color
-      }, ${adjustColor(sprint.color, -20)});">
+          sprint.color
+        }, ${adjustColor(sprint.color, -20)});">
           <div class="zone-header-left">
             <div class="sprint-number">${index + 1}</div>
             <div>
@@ -179,7 +179,7 @@ function renderSprints() {
                   ${tarea.actividades.map((act) => `<li>${act}</li>`).join("")}
                 </ul>
               </div>
-            `
+            `,
               )
               .join("")}
           </div>

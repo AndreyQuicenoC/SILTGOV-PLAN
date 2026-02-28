@@ -1,13 +1,14 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Finanz - Gestor de Finanzas Personales. Documentación completa del proyecto."
+      content="SILTGOV - Sistema Integrado de Liquidaciones de la Gobernacion del Valle del Cauca. Documentacion tecnica del proyecto."
     />
-    <title>Finanz - Gestor de Finanzas Personales</title>
+    <title>SILTGOV - Documentacion del Proyecto</title>
+    <link rel="icon" type="image/svg+xml" href="assets/siltgov-icon.svg" />
     <link rel="stylesheet" href="styles/user_stories.css" />
     <link rel="stylesheet" href="styles/index.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -18,96 +19,53 @@
     />
   </head>
   <body>
+    <!-- ===== CABECERA ===== -->
     <header class="header">
       <div class="container">
         <div class="header-content">
           <div class="logo-section">
-            <img src="finanz-logo.svg" alt="Finanz Logo" class="logo-img" />
+            <img id="header-logo" src="assets/siltgov-icon.svg" alt="SILTGOV" class="logo-img" />
             <div class="logo-text">
-              <h1 class="logo-title">Finanz</h1>
-              <p class="logo-subtitle">Gestor de Finanzas Personales</p>
+              <h1 class="logo-title" id="header-title">SILTGOV</h1>
+              <p class="logo-subtitle" id="header-subtitle">Sistema Integrado de Liquidaciones</p>
             </div>
           </div>
-          <button
-            id="theme-toggle"
-            class="theme-toggle"
-            aria-label="Cambiar tema"
-          >
+          <button id="theme-toggle" class="theme-toggle" aria-label="Cambiar tema">
             <span class="theme-icon">Oscuro</span>
           </button>
         </div>
       </div>
     </header>
 
+    <!-- ===== CONTENIDO PRINCIPAL ===== -->
     <main class="main">
       <div class="container">
-        <section class="welcome-section">
-          <h2 class="welcome-title">Documentación del Proyecto</h2>
-          <p class="welcome-description">
-            Explora las diferentes secciones de la documentación para conocer la
-            estructura, funcionalidades y planificación del proyecto Finanz.
+
+        <!-- Bienvenida -->
+        <section class="welcome-section" aria-label="Bienvenida">
+          <h2 class="welcome-title" id="welcome-title">Documentacion del Proyecto</h2>
+          <p class="welcome-description" id="welcome-description">
+            Cargando...
           </p>
         </section>
 
-        <section class="navigation-grid">
-          <a href="views/databse_plan.html" class="nav-card">
-            <div class="nav-card-header">
-              <div class="nav-card-icon nav-icon-database"></div>
-              <h3 class="nav-card-title">Planificación de Base de Datos</h3>
-            </div>
-            <p class="nav-card-description">
-              Diagrama ERD completo y estructura detallada de la base de datos
-              PostgreSQL
-            </p>
-            <span class="nav-card-arrow">→</span>
-          </a>
+        <!-- Cuadricula de navegacion (renderizada desde index_data.js) -->
+        <nav class="navigation-grid" id="navigation-grid" aria-label="Secciones del proyecto">
+          <!-- Renderizado dinamico desde scripts/index.js -->
+        </nav>
 
-          <a href="views/site_map.html" class="nav-card">
-            <div class="nav-card-header">
-              <div class="nav-card-icon nav-icon-sitemap"></div>
-              <h3 class="nav-card-title">Mapa del Sitio</h3>
-            </div>
-            <p class="nav-card-description">
-              Estructura completa del sitio web incluyendo zonas públicas,
-              privadas y administrativas
-            </p>
-            <span class="nav-card-arrow">→</span>
-          </a>
-
-          <a href="views/user_stories.html" class="nav-card">
-            <div class="nav-card-header">
-              <div class="nav-card-icon nav-icon-stories"></div>
-              <h3 class="nav-card-title">Historias de Usuario</h3>
-            </div>
-            <p class="nav-card-description">
-              Casos de uso detallados, requerimientos funcionales organizados
-              por épicas y sprints
-            </p>
-            <span class="nav-card-arrow">→</span>
-          </a>
-
-          <a href="views/team_distribution.html" class="nav-card">
-            <div class="nav-card-header">
-              <div class="nav-card-icon nav-icon-team"></div>
-              <h3 class="nav-card-title">Distribución del Equipo</h3>
-            </div>
-            <p class="nav-card-description">
-              Roles del equipo, responsabilidades y organización ágil por
-              sprints
-            </p>
-            <span class="nav-card-arrow">→</span>
-          </a>
-        </section>
       </div>
     </main>
 
+    <!-- ===== PIE DE PAGINA ===== -->
     <footer class="footer">
       <div class="container">
-        <p>&copy; 2025 Finanz - Gestor de Finanzas Personales</p>
-        <p>Proyecto desarrollado con metodología ágil Scrum</p>
+        <!-- Renderizado dinamico desde scripts/index.js -->
       </div>
     </footer>
 
+    <!-- Datos primero, luego el motor de renderizado -->
+    <script src="data/index_data.js"></script>
     <script src="scripts/index.js"></script>
   </body>
 </html>

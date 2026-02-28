@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="Distribucion del equipo de desarrollo y planificacion de sprints del proyecto SILTGOV"
+      content="Equipo de desarrollo ClustLayer - SILTGOV Sistema Integrado de Liquidaciones"
     />
-    <title>Distribucion del Equipo - SILTGOV</title>
+    <title>Equipo de Trabajo - SILTGOV</title>
     <link rel="icon" type="image/svg+xml" href="../assets/siltgov-icon.svg" />
     <link rel="stylesheet" href="../styles/user_stories.css" />
-    <link rel="stylesheet" href="../styles/team_distribution.css" />
+    <link rel="stylesheet" href="../styles/team_members.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -24,10 +24,10 @@
         <div class="header-content">
           <h1 class="logo">
             <span class="logo-icon"></span>
-            Distribución del Equipo
+            Equipo de Trabajo
           </h1>
           <div class="project-info">
-            <span class="project-name">Finanz</span>
+            <span class="project-name">SILTGOV</span>
           </div>
           <div style="display: flex; gap: 0.5rem; align-items: center">
             <a
@@ -35,7 +35,7 @@
               class="back-button"
               aria-label="Volver al inicio"
             >
-              <span>←</span> Inicio
+              <span>&#8592;</span> Inicio
             </a>
             <button
               id="theme-toggle"
@@ -51,48 +51,33 @@
 
     <main class="main">
       <div class="container">
-        <!-- Información del equipo -->
-        <section class="info-section">
-          <p class="info-description" id="team-description">
-            <!-- Se cargará desde team_data.js -->
-          </p>
-        </section>
-
-        <!-- Error State -->
+        <!-- Error state -->
         <div id="error-state" class="error-state" hidden role="alert">
-          <h2>Error al cargar información</h2>
+          <h2>Error al cargar informacion</h2>
           <p id="error-message"></p>
         </div>
 
-        <!-- Roles del equipo -->
-        <section class="roles-section">
-          <h2 class="section-title">Roles del Equipo</h2>
-          <div id="roles-container" class="roles-container">
-            <!-- Se cargará dinámicamente desde team_data.js -->
-          </div>
-        </section>
+        <!-- Team hero -->
+        <div id="team-hero" hidden></div>
 
-        <!-- Sprints del proyecto -->
-        <section class="sprints-section">
-          <h2 class="section-title">Distribución por Sprints</h2>
-          <p class="section-description">
-            Planificación de entregas en 10 semanas (5 sprints de 2 semanas)
-          </p>
-          <div id="sprints-container" class="sprints-container">
-            <!-- Se cargará dinámicamente -->
-          </div>
+        <!-- Members section -->
+        <section id="members-section" hidden>
+          <h2 class="members-section-title">Integrantes del Equipo</h2>
+          <div id="members-grid" class="members-grid"></div>
         </section>
       </div>
     </main>
 
     <footer class="footer">
       <div class="container">
-        <p>&copy; 2025 Finanz - Gestor de Finanzas Personales</p>
-        <p>Equipo organizado con metodología ágil Scrum</p>
+        <p>
+          &copy; 2025 SILTGOV - Sistema Integrado de Liquidaciones del Gobierno
+        </p>
+        <p>Desarrollado por ClustLayer - Dev on time</p>
       </div>
     </footer>
 
-    <script src="../data/team_data.js"></script>
-    <script src="../scripts/team_distribution.js"></script>
+    <script src="../data/team_members_data.js"></script>
+    <script src="../scripts/team_members.js"></script>
   </body>
 </html>
