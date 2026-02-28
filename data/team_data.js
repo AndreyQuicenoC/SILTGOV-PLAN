@@ -2,7 +2,7 @@
 // team_data.js  Distribucion del Equipo por Sprint
 // Proyecto: SILTGOV  Sistema Integrado de Liquidaciones
 // Equipo: ClustLayer | Dev on time
-// Velocidad: 18 puntos/sprint | 12 sprints | 216 puntos totales
+// Velocidad: 18 puntos/sprint | 13 sprints | 234 puntos totales
 // ============================================================
 
 const TEAM_DATA = {
@@ -11,8 +11,8 @@ const TEAM_DATA = {
   description: "Equipo de 3 integrantes que trabaja con metodologia Scrum. Velocidad de 18 puntos por sprint durante 12 sprints de una semana cada uno, con un total planificado de 216 puntos de historia.",
   velocity: 18,
   sprintDuration: "1 semana",
-  totalSprints: 12,
-  totalPoints: 216,
+  totalSprints: 13,
+  totalPoints: 234,
 
   epics: [
     { id: "E-1",  name: "Infraestructura y DevOps",                 color: "#3b82f6", description: "Repositorio, pipeline CI/CD, entorno de desarrollo, SonarCloud, testing y documentacion tecnica." },
@@ -20,6 +20,7 @@ const TEAM_DATA = {
     { id: "E-3",  name: "Gestion de Entidades (Superusuario)",      color: "#8b5cf6", description: "Creacion y gestion de departamentos, entidades publicas, oficinas y usuarios administradores y pagadores." },
     { id: "E-4",  name: "Gestion de Sentencias",                    color: "#f59e0b", description: "Registro de sentencias, asignacion y reasignacion a liquidadores, gestion de plazos." },
     { id: "E-5",  name: "Liquidaciones  Creacion y Edicion",       color: "#10b981", description: "Formulario multi-paso, ingreso de datos laborales y del beneficiario, calculo automatico." },
+    { id: "E-6",  name: "Gestion de Beneficiarios",                color: "#06b6d4", description: "Catalogo centralizado de beneficiarios. Evita duplicacion de datos en cada liquidacion. CRUD, busqueda por documento y autocompletado en el formulario de liquidacion." },
     { id: "E-7",  name: "Pagos y Comprobantes",                     color: "#06b6d4", description: "Visualizacion de liquidaciones terminadas por el pagador, registro de pago y carga de comprobante." },
     { id: "E-8",  name: "Generacion de Documentos",                 color: "#6366f1", description: "PDF oficial de liquidacion con codigo de verificacion, gestion de adjuntos y visor de documentos." },
     { id: "E-9",  name: "Reportes y Auditoria",                     color: "#64748b", description: "Microservicio de logs, dashboard de auditoria para Superusuario y reportes internos y globales." },
@@ -207,8 +208,51 @@ const TEAM_DATA = {
     },
     {
       id: "sprint-5",
-      name: "Sprint 5: Administrador  Sentencias y Vistas",
+      name: "Sprint 5: Gestion Centralizada de Beneficiarios",
       duration: "Semana 5",
+      color: "#10b981",
+      totalPoints: 18,
+      goal: "Catalogo centralizado de beneficiarios operativo. El formulario de liquidaciones busca y reutiliza datos sin duplicacion.",
+      teamNote: "Francesco implementa el modelo y los endpoints del catalogo de beneficiarios. Andrey construye la interfaz de busqueda, el autocompletado en el formulario de liquidaciones y las pantallas del modulo. Ivan valida la integracion en el pipeline CI. Demo al finalizar: crear un beneficiario, buscarlo por documento y ver como se autocompleta en el formulario de liquidacion.",
+      epics: ["E-6"],
+      stories: [
+        {
+          code: "HU-38", title: "Registro y gestion del catalogo de beneficiarios",
+          points: 8, assignedTo: "Juan Francesco Garcia",
+          tasks: [
+            { id: "T-38-1", title: "Migrar tabla beneficiaries en BD",                    assignedTo: "Juan Francesco Garcia", role: "Backend" },
+            { id: "T-38-2", title: "Implementar endpoint POST /beneficiaries",            assignedTo: "Juan Francesco Garcia", role: "Backend" },
+            { id: "T-38-3", title: "Implementar GET /beneficiaries con busqueda",         assignedTo: "Juan Francesco Garcia", role: "Backend" },
+            { id: "T-38-4", title: "Implementar PATCH /beneficiaries/:id",                assignedTo: "Juan Francesco Garcia", role: "Backend" },
+            { id: "T-38-5", title: "Agregar auditoria en creacion y edicion",             assignedTo: "Juan Francesco Garcia", role: "Backend" },
+            { id: "T-38-6", title: "Pruebas unitarias del modulo beneficiaries",          assignedTo: "Juan Francesco Garcia", role: "Backend" },
+          ],
+        },
+        {
+          code: "HU-39", title: "Busqueda y seleccion de beneficiario en formulario",
+          points: 5, assignedTo: "Juan Francesco Garcia",
+          tasks: [
+            { id: "T-39-1", title: "Logica de busqueda de beneficiario en backend",       assignedTo: "Juan Francesco Garcia", role: "Backend" },
+            { id: "T-39-2", title: "Componente de busqueda con autocompletado en frontend",assignedTo: "Adolfo Andrey Quiceno", role: "Frontend" },
+            { id: "T-39-3", title: "Validar vinculacion obligatoria de beneficiario",     assignedTo: "Juan Francesco Garcia", role: "Backend" },
+          ],
+        },
+        {
+          code: "HU-40", title: "Interfaz de gestion del catalogo de beneficiarios",
+          points: 5, assignedTo: "Adolfo Andrey Quiceno",
+          tasks: [
+            { id: "T-40-1", title: "Wireframe de pantallas del modulo beneficiarios",     assignedTo: "Adolfo Andrey Quiceno", role: "UX/UI" },
+            { id: "T-40-2", title: "Implementar listado y filtros de beneficiarios",      assignedTo: "Adolfo Andrey Quiceno", role: "Frontend" },
+            { id: "T-40-3", title: "Vista de detalle y edicion de beneficiario",          assignedTo: "Adolfo Andrey Quiceno", role: "Frontend" },
+            { id: "T-40-4", title: "Conectar pantallas con API de beneficiarios",         assignedTo: "Adolfo Andrey Quiceno", role: "Frontend" },
+          ],
+        },
+      ],
+    },
+    {
+      id: "sprint-6",
+      name: "Sprint 6: Administrador  Sentencias y Vistas",
+      duration: "Semana 6",
       color: "#f59e0b",
       totalPoints: 18,
       goal: "El Administrador puede registrar sentencias, crear liquidadores y ver su dashboard operativo.",
@@ -246,9 +290,9 @@ const TEAM_DATA = {
       ],
     },
     {
-      id: "sprint-6",
-      name: "Sprint 6: Asignacion y Creacion de Liquidaciones",
-      duration: "Semana 6",
+      id: "sprint-7",
+      name: "Sprint 7: Asignacion y Creacion de Liquidaciones",
+      duration: "Semana 7",
       color: "#10b981",
       totalPoints: 18,
       goal: "El Administrador puede asignar liquidaciones y el Liquidador puede iniciar la creacion de una.",
@@ -288,9 +332,9 @@ const TEAM_DATA = {
       ],
     },
     {
-      id: "sprint-7",
-      name: "Sprint 7: Calculos y Calidad de Codigo",
-      duration: "Semana 7",
+      id: "sprint-8",
+      name: "Sprint 8: Calculos y Calidad de Codigo",
+      duration: "Semana 8",
       color: "#10b981",
       totalPoints: 18,
       goal: "El calculo automatico de liquidaciones funciona correctamente y SonarCloud esta integrado en el pipeline.",
@@ -330,9 +374,9 @@ const TEAM_DATA = {
       ],
     },
     {
-      id: "sprint-8",
-      name: "Sprint 8: Documentos PDF y Adjuntos",
-      duration: "Semana 8",
+      id: "sprint-9",
+      name: "Sprint 9: Documentos PDF y Adjuntos",
+      duration: "Semana 9",
       color: "#6366f1",
       totalPoints: 18,
       goal: "El sistema genera PDF oficial de liquidacion con codigo de verificacion y gestiona adjuntos correctamente.",
@@ -370,9 +414,9 @@ const TEAM_DATA = {
       ],
     },
     {
-      id: "sprint-9",
-      name: "Sprint 9: Flujo de Pagos",
-      duration: "Semana 9",
+      id: "sprint-10",
+      name: "Sprint 10: Flujo de Pagos",
+      duration: "Semana 10",
       color: "#06b6d4",
       totalPoints: 18,
       goal: "El Pagador puede ver liquidaciones terminadas, registrar pagos y cargar comprobantes. El estado cambia a Pagada automaticamente.",
@@ -411,9 +455,9 @@ const TEAM_DATA = {
       ],
     },
     {
-      id: "sprint-10",
-      name: "Sprint 10: Auditoria, Logs y Testing E2E",
-      duration: "Semana 10",
+      id: "sprint-11",
+      name: "Sprint 11: Auditoria, Logs y Testing E2E",
+      duration: "Semana 11",
       color: "#64748b",
       totalPoints: 18,
       goal: "Microservicio de logs funcionando, dashboard de auditoria para Superusuario y suite de pruebas E2E en CI.",
@@ -453,9 +497,9 @@ const TEAM_DATA = {
       ],
     },
     {
-      id: "sprint-11",
-      name: "Sprint 11: Reportes",
-      duration: "Semana 11",
+      id: "sprint-12",
+      name: "Sprint 12: Reportes",
+      duration: "Semana 12",
       color: "#64748b",
       totalPoints: 18,
       goal: "Reportes internos del Administrador y reportes globales del Superusuario implementados y exportables.",
@@ -492,9 +536,9 @@ const TEAM_DATA = {
       ],
     },
     {
-      id: "sprint-12",
-      name: "Sprint 12: Pulido Final y Preparacion para Demo",
-      duration: "Semana 12",
+      id: "sprint-13",
+      name: "Sprint 13: Pulido Final y Preparacion para Demo",
+      duration: "Semana 13",
       color: "#6366f1",
       totalPoints: 18,
       goal: "Sistema desplegado en AWS por HTTPS, documentacion completa y manual de usuario listo para presentar a la entidad.",
@@ -535,3 +579,4 @@ const TEAM_DATA = {
     },
   ],
 };
+

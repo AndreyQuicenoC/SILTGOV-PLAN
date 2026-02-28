@@ -7,7 +7,7 @@
 
 const DATABASE_DATA = {
   title: "Modelo de Base de Datos  SILTGOV",
-  subtitle: "Modelo relacional multi-entidad en PostgreSQL. Cubre la gestion de liquidaciones, usuarios por rol, estados, pagos, documentos y auditoria completa.",
+  subtitle: "Modelo relacional multi-entidad en PostgreSQL. Cubre la gestion de beneficiarios, liquidaciones, usuarios por rol, estados, pagos, documentos y auditoria completa. Los beneficiarios son una entidad centralizada que evita duplicar datos en cada liquidacion.",
 
   tables: [
     //  ESTRUCTURA INSTITUCIONAL 
@@ -60,6 +60,35 @@ const DATABASE_DATA = {
         { name: "is_active",      type: "field",           note: "BOOLEAN DEFAULT true" },
         { name: "created_at",     type: "field",           note: "TIMESTAMPTZ DEFAULT NOW()" },
       ],
+    },
+
+    //  BENEFICIARIOS 
+    // Tabla centralizada de beneficiarios — evita duplicar datos personales
+    // en cada liquidación y permite asociar un mismo ciudadano a múltiples casos.
+    {
+      id: "beneficiaries",
+      name: "beneficiaries",
+      x: 380, y: 260, width: 340, height: 260,
+      color: "#ecfdf5", stroke: "#6ee7b7",
+      category: "Beneficiarios",
+      fields: [
+        { name: "id",               type: "PK",  isPK: true, note: "SERIAL PRIMARY KEY" },
+        { name: "doc_type",         type: "field",           note: "VARCHAR(20) NOT NULL  CC | CE | TI | PE" },
+        { name: "doc_number",       type: "field",           note: "VARCHAR(30) NOT NULL" },
+        { name: "full_name",        type: "field",           note: "VARCHAR(200) NOT NULL" },
+        { name: "email",            type: "field",           note: "VARCHAR(200)" },
+        { name: "phone",            type: "field",           note: "VARCHAR(20)" },
+        { name: "address",          type: "field",           note: "TEXT" },
+        { name: "city",             type: "field",           note: "VARCHAR(100)" },
+        { name: "birth_date",       type: "field",           note: "DATE" },
+        { name: "bank_name",        type: "field",           note: "VARCHAR(100)  banco para pago" },
+        { name: "bank_account",     type: "field",           note: "VARCHAR(40)  cuenta bancaria" },
+        { name: "account_type",     type: "field",           note: "VARCHAR(20)  ahorros | corriente" },
+        { name: "is_active",        type: "field",           note: "BOOLEAN DEFAULT true" },
+        { name: "created_at",       type: "field",           note: "TIMESTAMPTZ DEFAULT NOW()" },
+        { name: "updated_at",       type: "field",           note: "TIMESTAMPTZ" },
+      ],
+      uniqueConstraints: ["UNIQUE(doc_type, doc_number)"],
     },
 
     //  USUARIOS Y SESIONES 
@@ -159,21 +188,16 @@ const DATABASE_DATA = {
     {
       id: "liquidations",
       name: "liquidations",
-      x: 420, y: 980, width: 360, height: 480,
+      x: 420, y: 980, width: 360, height: 440,
       color: "#fffbeb", stroke: "#fde68a",
       category: "Sentencias y Liquidaciones",
       fields: [
         { name: "id",                   type: "PK",  isPK: true, note: "SERIAL PRIMARY KEY" },
         { name: "sentence_id",          type: "FK",  isFK: true, ref: "sentences.id", note: "NOT NULL" },
+        { name: "beneficiary_id",       type: "FK",  isFK: true, ref: "beneficiaries.id", note: "NOT NULL — beneficiario centralizado" },
         { name: "assigned_to",          type: "FK",  isFK: true, ref: "users.id", note: "liquidador asignado" },
         { name: "assigned_by",          type: "FK",  isFK: true, ref: "users.id", note: "administrador que asigna" },
         { name: "status",               type: "field",           note: "ENUM: creada|en_proceso|terminada|pagada" },
-        { name: "beneficiary_name",     type: "field",           note: "VARCHAR(200) NOT NULL" },
-        { name: "beneficiary_doc_type", type: "field",           note: "VARCHAR(20)  CC, CE" },
-        { name: "beneficiary_doc",      type: "field",           note: "VARCHAR(30) NOT NULL" },
-        { name: "beneficiary_email",    type: "field",           note: "VARCHAR(200)" },
-        { name: "beneficiary_phone",    type: "field",           note: "VARCHAR(20)" },
-        { name: "beneficiary_address",  type: "field",           note: "TEXT" },
         { name: "position",             type: "field",           note: "VARCHAR(150)  cargo desempenado" },
         { name: "contract_type",        type: "field",           note: "VARCHAR(80)  contrato, nombramiento..." },
         { name: "start_date",           type: "field",           note: "DATE  inicio laboral" },
@@ -335,6 +359,7 @@ const DATABASE_DATA = {
     { from: "sentences.office_id",        to: "offices.id",          type: "many-to-one", label: "asignada a" },
     { from: "sentences.registered_by",    to: "users.id",            type: "many-to-one", label: "registrada por" },
     { from: "liquidations.sentence_id",   to: "sentences.id",        type: "many-to-one", label: "derivada de" },
+    { from: "liquidations.beneficiary_id",to: "beneficiaries.id",    type: "many-to-one", label: "pertenece a" },
     { from: "liquidations.assigned_to",   to: "users.id",            type: "many-to-one", label: "asignada a" },
     { from: "liquidations.assigned_by",   to: "users.id",            type: "many-to-one", label: "asignada por" },
     { from: "liquidations.edit_authorized_by", to: "users.id",       type: "many-to-one", label: "autorizada por" },
