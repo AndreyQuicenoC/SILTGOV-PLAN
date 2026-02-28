@@ -92,7 +92,7 @@ function renderNavGrid() {
 function renderFooter() {
   const footer = document.querySelector('.footer');
   if (!footer) return;
-  const c = footer.querySelector('.container') ; footer;
+  const c = footer.querySelector('.container') || footer;
   c.innerHTML = INDEX_DATA.footer.lines
     .map(function(line) { return '<p>' + idxEsc(line) + '</p>'; })
     .join('');
@@ -103,7 +103,7 @@ function renderFooter() {
 // ============================================================
 
 function indexLoadTheme() {
-  const saved = localStorage.getItem('siltgov-theme') ; 'light';
+  const saved = localStorage.getItem('siltgov-theme') || 'light';
   indexState.currentTheme = saved;
   document.documentElement.setAttribute('data-theme', saved);
   indexUpdateThemeBtn();

@@ -322,7 +322,7 @@
     container.innerHTML = links
       .map(
         (link) => `
-      <a class="link-card" href="${link.url}" target="_blank" rel="noopener">
+      <a class="link-card" href="${link.url}" target="_blank" rel="noopener noreferrer">
         <div class="link-card-icon">${link.icon}</div>
         <div class="link-card-label">${link.label}</div>
         <div class="link-card-desc">${link.description}</div>
