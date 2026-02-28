@@ -1,241 +1,275 @@
-// ===================================
-// Team Distribution - Dynamic Rendering
-// ===================================
+/**
+ * team_distribution.js
+ * Distribucion por sprints - historias, tareas y asignaciones
+ * Proyecto: SILTGOV - Equipo ClustLayer
+ */
 
-// Estado de la aplicación
-const state = {
-  expandedRoles: new Set(),
-  expandedSprints: new Set(),
-};
+// ==================== Utilidades ====================
+function escapeHtml(text) {
+  if (typeof text !== "string") return String(text || "");
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
 
-// Initialize theme on page load
-document.addEventListener("DOMContentLoaded", () => {
-  initTheme();
-  renderTeamDistribution();
-});
+// ==================== Tema ====================
+let currentTheme = "light";
 
-// ===================================
-// Theme Management
-// ===================================
-function initTheme() {
-  const themeToggle = document.getElementById("theme-toggle");
-  const savedTheme = localStorage.getItem("theme") || "light";
-
-  document.documentElement.setAttribute("data-theme", savedTheme);
-  updateThemeIcon(savedTheme);
-
-  if (themeToggle) {
-    themeToggle.addEventListener("click", toggleTheme);
-  }
+function loadTheme() {
+  currentTheme = localStorage.getItem("theme") || "light";
+  document.documentElement.setAttribute("data-theme", currentTheme);
+  updateThemeIcon();
 }
 
 function toggleTheme() {
-  const currentTheme = document.documentElement.getAttribute("data-theme");
-  const newTheme = currentTheme === "light" ? "dark" : "light";
-
-  document.documentElement.setAttribute("data-theme", newTheme);
-  localStorage.setItem("theme", newTheme);
-  updateThemeIcon(newTheme);
+  currentTheme = currentTheme === "light" ? "dark" : "light";
+  document.documentElement.setAttribute("data-theme", currentTheme);
+  localStorage.setItem("theme", currentTheme);
+  updateThemeIcon();
 }
 
-function updateThemeIcon(theme) {
-  const themeIcon = document.querySelector(".theme-icon");
-  if (themeIcon) {
-    themeIcon.textContent = theme === "light" ? "Oscuro" : "Claro";
-  }
+function updateThemeIcon() {
+  const icon = document.querySelector("#theme-toggle .theme-icon");
+  if (icon) icon.textContent = currentTheme === "light" ? "Oscuro" : "Claro";
 }
 
-// ===================================
-// Main Render Function
-// ===================================
-function renderTeamDistribution() {
+// ==================== Task Counters ====================
+/**
+ * Calcula el numero de tareas asignadas a cada desarrollador
+ * @param {Array} sprints - Array de sprints
+ * @returns {Object} { overall: {dev: count, ...}, perSprint: {sprintId: {dev: count, ...}, ...} }
+ */
+function calcTaskCounters(sprints) {
+  const overall = {};
+  const perSprint = {};
+
+  sprints.forEach((sprint) => {
+    const sprintKey = sprint.id || sprint.name;
+    perSprint[sprintKey] = {};
+
+    (sprint.stories || []).forEach((story) => {
+      (story.tasks || []).forEach((task) => {
+        const dev = task.assignedTo || "Sin asignar";
+        overall[dev] = (overall[dev] || 0) + 1;
+        perSprint[sprintKey][dev] = (perSprint[sprintKey][dev] || 0) + 1;
+      });
+    });
+  });
+
+  return { overall, perSprint };
+}
+
+/**
+ * Genera el HTML de la tabla de contadores por desarrollador
+ * @param {Object} counts - { dev: taskCount }
+ * @param {number} totalTasks - Total de tareas para calcular el porcentaje
+ */
+function renderCounterTable(counts, totalTasks) {
+  const devColors = {
+    "Juan Francesco Garcia": "#3B82F6",
+    "Ivan Ausecha":          "#10B981",
+    "Adolfo Andrey Quiceno": "#8B5CF6",
+  };
+
+  const sortedDevs = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+
+  return `
+    <div class="task-counter-table">
+      ${sortedDevs
+        .map(([dev, count]) => {
+          const pct = totalTasks > 0 ? Math.round((count / totalTasks) * 100) : 0;
+          const color = devColors[dev] || "#64748b";
+          const shortName = dev.split(" ")[0] + " " + (dev.split(" ").pop() || "");
+          return `
+            <div class="task-counter-row">
+              <span class="task-counter-dev" title="${escapeHtml(dev)}">${escapeHtml(shortName)}</span>
+              <div class="task-counter-bar-wrap">
+                <div class="task-counter-bar" style="width:${pct}%;background:${color}"></div>
+              </div>
+              <span class="task-counter-count" style="color:${color}">${count}</span>
+              <span class="task-counter-pct">${pct}%</span>
+            </div>`;
+        })
+        .join("")}
+    </div>
+  `;
+}
+
+/**
+ * Renderiza el resumen global de tareas por desarrollador
+ * @param {Object} overall - { dev: taskCount }
+ */
+function renderGlobalCounters(overall) {
+  const container = document.getElementById("global-task-counters");
+  if (!container) return;
+
+  const totalTasks = Object.values(overall).reduce((a, b) => a + b, 0);
+
+  container.innerHTML = `
+    <div class="counter-card">
+      <div class="counter-card-header">
+        <span class="counter-card-title">📊 Distribución de tareas — Proyecto completo</span>
+        <span class="counter-card-total">${totalTasks} tareas totales</span>
+      </div>
+      ${renderCounterTable(overall, totalTasks)}
+    </div>
+  `;
+  container.hidden = false;
+}
+
+// ==================== Funciones de render ====================
+function renderMetrics(data) {
+  const sec = document.getElementById("metrics-section");
+  const container = document.getElementById("metrics-container");
+  if (!sec || !container) return;
+
+  container.innerHTML = `
+    <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(140px,1fr)); gap:1rem; margin-bottom:2rem;">
+      <div class="sprint-metric-card">
+        <span class="sprint-metric-value">${data.totalSprints}</span>
+        <span class="sprint-metric-label">Sprints</span>
+      </div>
+      <div class="sprint-metric-card">
+        <span class="sprint-metric-value">${data.velocity}</span>
+        <span class="sprint-metric-label">Velocidad (pts/sprint)</span>
+      </div>
+      <div class="sprint-metric-card">
+        <span class="sprint-metric-value">${data.totalPoints}</span>
+        <span class="sprint-metric-label">Puntos Totales</span>
+      </div>
+      <div class="sprint-metric-card">
+        <span class="sprint-metric-value">${(data.epics || []).length}</span>
+        <span class="sprint-metric-label">Epicas</span>
+      </div>
+    </div>
+  `;
+  sec.hidden = false;
+}
+
+function renderTaskRow(task) {
+  return `
+    <div class="task-row">
+      <span class="task-id">${escapeHtml(task.id || "")}</span>
+      <span class="task-title">${escapeHtml(task.title || "")}</span>
+      <span class="task-assignee">${escapeHtml(task.assignedTo || "")}</span>
+      <span class="task-role-badge">${escapeHtml(task.role || "")}</span>
+    </div>
+  `;
+}
+
+function renderStoryBlock(story) {
+  const tasks = Array.isArray(story.tasks) ? story.tasks : [];
+  const tasksHTML = tasks.length > 0
+    ? `<div class="story-tasks">
+        <div class="tasks-header">
+          <span class="tasks-col tasks-col-id">ID</span>
+          <span class="tasks-col tasks-col-title">Tarea</span>
+          <span class="tasks-col tasks-col-assignee">Asignado a</span>
+          <span class="tasks-col tasks-col-role">Rol</span>
+        </div>
+        ${tasks.map(renderTaskRow).join("")}
+       </div>`
+    : `<p class="no-tasks">Sin tareas registradas.</p>`;
+
+  return `
+    <div class="story-block">
+      <div class="story-block-header">
+        <span class="story-block-code">${escapeHtml(story.code || "")}</span>
+        <span class="story-block-title">${escapeHtml(story.title || "")}</span>
+        <span class="story-block-pts">${story.points || 0} pts</span>
+        <span class="story-block-assignee">Responsable: ${escapeHtml(story.assignedTo || "")}</span>
+      </div>
+      ${tasksHTML}
+    </div>
+  `;
+}
+
+function renderSprintCard(sprint, sprintCounts) {
+  const stories = Array.isArray(sprint.stories) ? sprint.stories : [];
+  const storiesHTML = stories.length > 0
+    ? stories.map(renderStoryBlock).join("")
+    : `<p class="no-stories">Sin historias asignadas.</p>`;
+
+  const sprintKey = sprint.id || sprint.name;
+  const counts = sprintCounts[sprintKey] || {};
+  const totalSprintTasks = Object.values(counts).reduce((a, b) => a + b, 0);
+
+  const counterHTML = totalSprintTasks > 0
+    ? `<div class="sprint-task-counter">
+        <span class="sprint-counter-label">Tareas: ${totalSprintTasks}</span>
+        ${renderCounterTable(counts, totalSprintTasks)}
+       </div>`
+    : "";
+
+  return `
+    <div class="sprint-card" style="border-left: 4px solid ${escapeHtml(sprint.color || "#64748b")}">
+      <div class="sprint-card-header">
+        <div class="sprint-card-info">
+          <h3 class="sprint-card-name">${escapeHtml(sprint.name || "")}</h3>
+          <p class="sprint-card-goal">${escapeHtml(sprint.goal || "")}</p>
+          ${sprint.teamNote ? `<p class="sprint-team-note">${escapeHtml(sprint.teamNote)}</p>` : ""}
+        </div>
+        <div class="sprint-card-meta">
+          <span class="sprint-pts-badge">${sprint.totalPoints || 0} pts</span>
+          <span class="sprint-duration">${escapeHtml(sprint.duration || "")}</span>
+        </div>
+      </div>
+      ${counterHTML}
+      <div class="sprint-stories">
+        ${storiesHTML}
+      </div>
+    </div>
+  `;
+}
+
+// ==================== Main ====================
+function init() {
+  loadTheme();
+
+  const themeBtn = document.getElementById("theme-toggle");
+  if (themeBtn) themeBtn.addEventListener("click", toggleTheme);
+
   try {
-    // Hide loading state
-    const loading = document.getElementById("loading");
-    if (loading) loading.hidden = true;
-
-    // Set description
-    const description = document.getElementById("team-description");
-    if (description && TEAM_DATA.descripcion) {
-      description.textContent = TEAM_DATA.descripcion;
+    if (typeof TEAM_DATA === "undefined") {
+      throw new Error("No se encontraron datos del equipo (TEAM_DATA).");
     }
 
-    // Render each section
-    renderRoles();
-    renderSprints();
-  } catch (error) {
-    showError("Error al cargar la información del equipo: " + error.message);
+    // Descripcion
+    const descEl = document.getElementById("team-description");
+    if (descEl) {
+      descEl.textContent =
+        `${TEAM_DATA.team} - "${TEAM_DATA.slogan}". ` +
+        (TEAM_DATA.description || "");
+    }
+
+    renderMetrics(TEAM_DATA);
+
+    const sprints = Array.isArray(TEAM_DATA.sprints) ? TEAM_DATA.sprints : [];
+
+    // Calculate and render task counters
+    const { overall, perSprint } = calcTaskCounters(sprints);
+    renderGlobalCounters(overall);
+
+    const container = document.getElementById("sprints-container");
+    if (!container) throw new Error("Contenedor de sprints no encontrado.");
+
+    if (sprints.length === 0) {
+      container.innerHTML = "<p>No hay sprints definidos.</p>";
+      return;
+    }
+
+    container.innerHTML = sprints.map((sprint) => renderSprintCard(sprint, perSprint)).join("");
+
+  } catch (err) {
+    console.error("Error en team_distribution:", err);
+    const errState = document.getElementById("error-state");
+    const errMsg = document.getElementById("error-message");
+    if (errState) errState.hidden = false;
+    if (errMsg) errMsg.textContent = err.message;
   }
 }
 
-// ===================================
-// Render Roles Section with Toggles
-// ===================================
-function renderRoles() {
-  const container = document.getElementById("roles-container");
-  if (!container) return;
-
-  const rolesHTML = TEAM_DATA.roles
-    .map((role, index) => {
-      const roleId = `role-${role.id}`;
-      const isExpanded = state.expandedRoles.has(roleId);
-
-      return `
-      <div class="zone-container" data-role-id="${roleId}">
-        <div class="zone-header" onclick="handleRoleToggle('${roleId}')">
-          <div class="zone-header-left">
-            <div class="role-icon" style="background: linear-gradient(135deg, ${
-              role.color
-            }, ${adjustColor(role.color, -20)});">
-              ${role.icono}
-            </div>
-            <div>
-              <h3 class="zone-name">${role.nombre}</h3>
-              <div class="zone-count">${role.miembros.join(", ")}</div>
-            </div>
-          </div>
-          <button class="zone-toggle" aria-label="Expandir/Colapsar">
-            <span class="toggle-icon">${isExpanded ? "−" : "+"}</span>
-          </button>
-        </div>
-        <div class="zone-content" ${
-          !isExpanded ? 'style="display: none;"' : ""
-        }>
-          <div class="role-responsibilities">
-            <h4>Responsabilidades principales:</h4>
-            <ul>
-              ${role.responsabilidades
-                .map((resp) => `<li>${resp}</li>`)
-                .join("")}
-            </ul>
-          </div>
-        </div>
-      </div>
-    `;
-    })
-    .join("");
-
-  container.innerHTML = rolesHTML;
-}
-
-function handleRoleToggle(roleId) {
-  const container = document.querySelector(`[data-role-id="${roleId}"]`);
-  if (!container) return;
-
-  const content = container.querySelector(".zone-content");
-  const toggleIcon = container.querySelector(".toggle-icon");
-
-  if (state.expandedRoles.has(roleId)) {
-    state.expandedRoles.delete(roleId);
-    content.style.display = "none";
-    toggleIcon.textContent = "+";
-  } else {
-    state.expandedRoles.add(roleId);
-    content.style.display = "block";
-    toggleIcon.textContent = "−";
-  }
-}
-
-// ===================================
-// Render Sprints Section with Toggles
-// ===================================
-function renderSprints() {
-  const container = document.getElementById("sprints-container");
-  if (!container) return;
-
-  const sprintsHTML = TEAM_DATA.sprints
-    .map((sprint, index) => {
-      const sprintId = `sprint-${sprint.id}`;
-      const isExpanded = state.expandedSprints.has(sprintId);
-
-      return `
-      <div class="zone-container" data-sprint-id="${sprintId}">
-        <div class="zone-header sprint-header" onclick="handleSprintToggle('${sprintId}')" style="background: linear-gradient(135deg, ${
-          sprint.color
-        }, ${adjustColor(sprint.color, -20)});">
-          <div class="zone-header-left">
-            <div class="sprint-number">${index + 1}</div>
-            <div>
-              <h3 class="zone-name" style="color: white;">${sprint.nombre}</h3>
-              <div class="zone-count" style="color: rgba(255,255,255,0.9);">${
-                sprint.duracion
-              } • ${sprint.enfoque}</div>
-            </div>
-          </div>
-          <button class="zone-toggle" aria-label="Expandir/Colapsar" style="background: rgba(255,255,255,0.2); color: white;">
-            <span class="toggle-icon">${isExpanded ? "−" : "+"}</span>
-          </button>
-        </div>
-        <div class="zone-content" ${
-          !isExpanded ? 'style="display: none;"' : ""
-        }>
-          <div class="sprint-tasks">
-            ${sprint.tareas
-              .map(
-                (tarea) => `
-              <div class="sprint-task-group">
-                <h4 class="task-role">${tarea.rol}</h4>
-                <ul class="task-list">
-                  ${tarea.actividades.map((act) => `<li>${act}</li>`).join("")}
-                </ul>
-              </div>
-            `,
-              )
-              .join("")}
-          </div>
-        </div>
-      </div>
-    `;
-    })
-    .join("");
-
-  container.innerHTML = sprintsHTML;
-}
-
-function handleSprintToggle(sprintId) {
-  const container = document.querySelector(`[data-sprint-id="${sprintId}"]`);
-  if (!container) return;
-
-  const content = container.querySelector(".zone-content");
-  const toggleIcon = container.querySelector(".toggle-icon");
-
-  if (state.expandedSprints.has(sprintId)) {
-    state.expandedSprints.delete(sprintId);
-    content.style.display = "none";
-    toggleIcon.textContent = "+";
-  } else {
-    state.expandedSprints.add(sprintId);
-    content.style.display = "block";
-    toggleIcon.textContent = "−";
-  }
-}
-
-// ===================================
-// Utility Functions
-// ===================================
-function adjustColor(color, percent) {
-  const num = parseInt(color.replace("#", ""), 16);
-  const r = (num >> 16) + percent;
-  const g = ((num >> 8) & 0x00ff) + percent;
-  const b = (num & 0x0000ff) + percent;
-
-  const newR = Math.min(255, Math.max(0, r));
-  const newG = Math.min(255, Math.max(0, g));
-  const newB = Math.min(255, Math.max(0, b));
-
-  return (
-    "#" + ((newR << 16) | (newG << 8) | newB).toString(16).padStart(6, "0")
-  );
-}
-
-function showError(message) {
-  const loading = document.getElementById("loading");
-  const errorState = document.getElementById("error-state");
-  const errorMessage = document.getElementById("error-message");
-
-  if (loading) loading.hidden = true;
-  if (errorState) {
-    errorState.hidden = false;
-    if (errorMessage) errorMessage.textContent = message;
-  }
-}
+document.addEventListener("DOMContentLoaded", init);
