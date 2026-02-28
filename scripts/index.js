@@ -9,13 +9,13 @@
  * @module index
  */
 
-'use strict';
+"use strict";
 
 // ============================================================
 // Estado
 // ============================================================
 const indexState = {
-  currentTheme: 'light',
+  currentTheme: "light",
 };
 
 // ============================================================
@@ -27,13 +27,13 @@ function idxEl(id) {
 }
 
 function idxEsc(str) {
-  if (typeof str !== 'string') return '';
+  if (typeof str !== "string") return "";
   return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
 
 // ============================================================
@@ -41,15 +41,15 @@ function idxEsc(str) {
 // ============================================================
 
 function renderHeader() {
-  const logoImg = idxEl('header-logo');
-  const title   = idxEl('header-title');
-  const sub     = idxEl('header-subtitle');
+  const logoImg = idxEl("header-logo");
+  const title = idxEl("header-title");
+  const sub = idxEl("header-subtitle");
   if (!logoImg || !title || !sub) return;
   const { header } = INDEX_DATA;
-  logoImg.src       = idxEsc(header.logoSrc);
-  logoImg.alt       = idxEsc(header.logoAlt);
+  logoImg.src = idxEsc(header.logoSrc);
+  logoImg.alt = idxEsc(header.logoAlt);
   title.textContent = header.title;
-  sub.textContent   = header.subtitle;
+  sub.textContent = header.subtitle;
 }
 
 // ============================================================
@@ -57,11 +57,11 @@ function renderHeader() {
 // ============================================================
 
 function renderWelcome() {
-  const titleEl = idxEl('welcome-title');
-  const descEl  = idxEl('welcome-description');
+  const titleEl = idxEl("welcome-title");
+  const descEl = idxEl("welcome-description");
   if (!titleEl || !descEl) return;
   titleEl.textContent = INDEX_DATA.welcome.title;
-  descEl.textContent  = INDEX_DATA.welcome.description;
+  descEl.textContent = INDEX_DATA.welcome.description;
 }
 
 // ============================================================
@@ -69,20 +69,32 @@ function renderWelcome() {
 // ============================================================
 
 function buildNavCard(card) {
-  return '<a href="' + idxEsc(card.href) + '" class="nav-card" aria-label="' + idxEsc(card.title) + '">' +
+  return (
+    '<a href="' +
+    idxEsc(card.href) +
+    '" class="nav-card" aria-label="' +
+    idxEsc(card.title) +
+    '">' +
     '<div class="nav-card-header">' +
-      '<div class="nav-card-icon ' + idxEsc(card.icon) + '" aria-hidden="true"></div>' +
-      '<h3 class="nav-card-title">' + idxEsc(card.title) + '</h3>' +
-    '</div>' +
-    '<p class="nav-card-description">' + idxEsc(card.description) + '</p>' +
+    '<div class="nav-card-icon ' +
+    idxEsc(card.icon) +
+    '" aria-hidden="true"></div>' +
+    '<h3 class="nav-card-title">' +
+    idxEsc(card.title) +
+    "</h3>" +
+    "</div>" +
+    '<p class="nav-card-description">' +
+    idxEsc(card.description) +
+    "</p>" +
     '<span class="nav-card-arrow" aria-hidden="true">&#8594;</span>' +
-  '</a>';
+    "</a>"
+  );
 }
 
 function renderNavGrid() {
-  const grid = idxEl('navigation-grid');
+  const grid = idxEl("navigation-grid");
   if (!grid) return;
-  grid.innerHTML = INDEX_DATA.navCards.map(buildNavCard).join('');
+  grid.innerHTML = INDEX_DATA.navCards.map(buildNavCard).join("");
 }
 
 // ============================================================
@@ -90,12 +102,14 @@ function renderNavGrid() {
 // ============================================================
 
 function renderFooter() {
-  const footer = document.querySelector('.footer');
+  const footer = document.querySelector(".footer");
   if (!footer) return;
-  const c = footer.querySelector('.container') || footer;
+  const c = footer.querySelector(".container") || footer;
   c.innerHTML = INDEX_DATA.footer.lines
-    .map(function(line) { return '<p>' + idxEsc(line) + '</p>'; })
-    .join('');
+    .map(function (line) {
+      return "<p>" + idxEsc(line) + "</p>";
+    })
+    .join("");
 }
 
 // ============================================================
@@ -103,22 +117,24 @@ function renderFooter() {
 // ============================================================
 
 function indexLoadTheme() {
-  const saved = localStorage.getItem('siltgov-theme') || 'light';
+  const saved = localStorage.getItem("siltgov-theme") || "light";
   indexState.currentTheme = saved;
-  document.documentElement.setAttribute('data-theme', saved);
+  document.documentElement.setAttribute("data-theme", saved);
   indexUpdateThemeBtn();
 }
 
 function indexToggleTheme() {
-  indexState.currentTheme = indexState.currentTheme === 'light' ? 'dark' : 'light';
-  document.documentElement.setAttribute('data-theme', indexState.currentTheme);
-  localStorage.setItem('siltgov-theme', indexState.currentTheme);
+  indexState.currentTheme =
+    indexState.currentTheme === "light" ? "dark" : "light";
+  document.documentElement.setAttribute("data-theme", indexState.currentTheme);
+  localStorage.setItem("siltgov-theme", indexState.currentTheme);
   indexUpdateThemeBtn();
 }
 
 function indexUpdateThemeBtn() {
-  const icon = document.querySelector('#theme-toggle .theme-icon');
-  if (icon) icon.textContent = indexState.currentTheme === 'light' ? 'Oscuro' : 'Claro';
+  const icon = document.querySelector("#theme-toggle .theme-icon");
+  if (icon)
+    icon.textContent = indexState.currentTheme === "light" ? "Oscuro" : "Claro";
 }
 
 // ============================================================
@@ -126,8 +142,10 @@ function indexUpdateThemeBtn() {
 // ============================================================
 
 function indexInit() {
-  if (typeof INDEX_DATA === 'undefined') {
-    console.error('[index] INDEX_DATA no encontrado. Verifica que index_data.js se cargo antes que index.js.');
+  if (typeof INDEX_DATA === "undefined") {
+    console.error(
+      "[index] INDEX_DATA no encontrado. Verifica que index_data.js se cargo antes que index.js.",
+    );
     return;
   }
   try {
@@ -136,15 +154,15 @@ function indexInit() {
     renderWelcome();
     renderNavGrid();
     renderFooter();
-    const btn = document.getElementById('theme-toggle');
-    if (btn) btn.addEventListener('click', indexToggleTheme);
+    const btn = document.getElementById("theme-toggle");
+    if (btn) btn.addEventListener("click", indexToggleTheme);
   } catch (err) {
-    console.error('[index] Error en la inicializacion:', err);
+    console.error("[index] Error en la inicializacion:", err);
   }
 }
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', indexInit);
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", indexInit);
 } else {
   indexInit();
 }
