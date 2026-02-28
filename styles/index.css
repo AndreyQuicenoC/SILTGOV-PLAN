@@ -182,6 +182,34 @@
   font-size: 0.875rem;
 }
 
+.nav-icon-project::after {
+  content: "PR";
+  color: white;
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+
+.nav-icon-members::after {
+  content: "MB";
+  color: white;
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+
+.nav-icon-iso::after {
+  content: "ISO";
+  color: white;
+  font-weight: 700;
+  font-size: 0.75rem;
+}
+
+.nav-icon-patterns::after {
+  content: "DP";
+  color: white;
+  font-weight: 700;
+  font-size: 0.875rem;
+}
+
 .nav-card-title {
   font-size: 1.125rem;
   font-weight: 600;

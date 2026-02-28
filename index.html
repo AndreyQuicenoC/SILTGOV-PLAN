@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
@@ -23,15 +23,11 @@
         <div class="header-content">
           <div class="logo-section">
             <div class="logo-text">
-              <h1 class="logo-title">SILTGOV</h1>
-              <p class="logo-subtitle">Sistema Integrado de Liquidaciones del Gobierno</p>
+              <h1 class="logo-title" id="page-title"></h1>
+              <p class="logo-subtitle" id="page-subtitle"></p>
             </div>
           </div>
-          <button
-            id="theme-toggle"
-            class="theme-toggle"
-            aria-label="Cambiar tema"
-          >
+          <button id="theme-toggle" class="theme-toggle" aria-label="Cambiar tema">
             <span class="theme-icon">Oscuro</span>
           </button>
         </div>
@@ -41,94 +37,23 @@
     <main class="main">
       <div class="container">
         <section class="welcome-section">
-          <h2 class="welcome-title">Documentacion del Proyecto</h2>
-          <p class="welcome-description">
-            Explora las diferentes secciones de la documentacion para conocer la
-            estructura, funcionalidades y planificacion del proyecto SILTGOV -
-            Sistema Integrado de Liquidaciones del Gobierno.
-          </p>
+          <h2 class="welcome-title" id="welcome-title"></h2>
+          <p class="welcome-description" id="welcome-description"></p>
         </section>
-
-        <section class="navigation-grid">
-          <a href="views/databse_plan.html" class="nav-card">
-            <div class="nav-card-header">
-              <div class="nav-card-icon nav-icon-database"></div>
-              <h3 class="nav-card-title">Planificación de Base de Datos</h3>
-            </div>
-            <p class="nav-card-description">
-              Diagrama ERD completo y estructura detallada de la base de datos
-              PostgreSQL
-            </p>
-            <span class="nav-card-arrow">→</span>
-          </a>
-
-          <a href="views/site_map.html" class="nav-card">
-            <div class="nav-card-header">
-              <div class="nav-card-icon nav-icon-sitemap"></div>
-              <h3 class="nav-card-title">Mapa del Sitio</h3>
-            </div>
-            <p class="nav-card-description">
-              Estructura completa del sitio web incluyendo zonas públicas,
-              privadas y administrativas
-            </p>
-            <span class="nav-card-arrow">→</span>
-          </a>
-
-          <a href="views/user_stories.html" class="nav-card">
-            <div class="nav-card-header">
-              <div class="nav-card-icon nav-icon-stories"></div>
-              <h3 class="nav-card-title">Historias de Usuario</h3>
-            </div>
-            <p class="nav-card-description">
-              Casos de uso detallados, requerimientos funcionales organizados
-              por épicas y sprints
-            </p>
-            <span class="nav-card-arrow">→</span>
-          </a>
-
-          <a href="views/team_distribution.html" class="nav-card">
-            <div class="nav-card-header">
-              <div class="nav-card-icon nav-icon-team"></div>
-              <h3 class="nav-card-title">Distribucion por Sprints</h3>
-            </div>
-            <p class="nav-card-description">
-              Historias de usuario y tareas con asignaciones por sprint y equipo
-            </p>
-            <span class="nav-card-arrow">&#8594;</span>
-          </a>
-
-          <a href="views/team_members.html" class="nav-card">
-            <div class="nav-card-header">
-              <div class="nav-card-icon nav-icon-team"></div>
-              <h3 class="nav-card-title">Equipo de Trabajo</h3>
-            </div>
-            <p class="nav-card-description">
-              Integrantes del equipo ClustLayer, perfiles, habilidades y contacto
-            </p>
-            <span class="nav-card-arrow">&#8594;</span>
-          </a>
-
-          <a href="views/project.html" class="nav-card">
-            <div class="nav-card-header">
-              <div class="nav-card-icon nav-icon-stories"></div>
-              <h3 class="nav-card-title">Informacion del Proyecto</h3>
-            </div>
-            <p class="nav-card-description">
-              Descripcion, objetivos, marco legal, arquitectura, roles y recursos del proyecto SILTGOV
-            </p>
-            <span class="nav-card-arrow">&#8594;</span>
-          </a>
+        <section class="navigation-grid" id="navigation-grid">
+          <!-- Cards rendered dynamically from INDEX_DATA via index.js -->
         </section>
       </div>
     </main>
 
     <footer class="footer">
       <div class="container">
-        <p>&copy; 2025 SILTGOV - Sistema Integrado de Liquidaciones del Gobierno</p>
-        <p>Equipo ClustLayer - metodologia agil Scrum</p>
+        <p id="footer-line1"></p>
+        <p id="footer-line2"></p>
       </div>
     </footer>
 
+    <script src="data/index_data.js"></script>
     <script src="scripts/index.js"></script>
   </body>
 </html>
