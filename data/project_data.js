@@ -276,6 +276,59 @@ const PROJECT_DATA = {
         icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`,
       },
     ],
+
+    client: {
+      label: "Cliente Web",
+      connectionLabel: "API REST · JWT auth · HTTPS",
+      color: "#3b82f6",
+      boxes: [
+        {
+          name: "Frontend SPA",
+          color: "#3b82f6",
+          description: "React / Vue — Vistas por rol, formularios y reportes",
+          tech: ["HTML/CSS/JS", "Axios", "Chart.js"],
+          icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>`,
+        },
+      ],
+    },
+
+    gateway: {
+      label: "Gateway / CDN",
+      connectionLabel: "Inter-service communication",
+      color: "#f59e0b",
+      boxes: [
+        {
+          name: "Cloudflare",
+          color: "#f59e0b",
+          description: "CDN + DDoS protection + HTTPS termination",
+          tech: ["CDN", "DDoS Shield", "TLS 1.3"],
+          icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
+        },
+      ],
+    },
+
+    microservicesLabel: "Microservicios (AWS EC2)",
+    microservicesConnectionLabel: "Database connections",
+
+    dataLayer: {
+      label: "Capa de datos (AWS)",
+      boxes: [
+        {
+          name: "Amazon RDS (PostgreSQL)",
+          color: "#8b5cf6",
+          description: "Base de datos relacional con separación lógica por entidad",
+          tech: ["PostgreSQL", "Multi-tenant"],
+          icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg>`,
+        },
+        {
+          name: "Amazon S3",
+          color: "#10b981",
+          description: "Almacenamiento de adjuntos, PDFs y comprobantes",
+          tech: ["Object Storage", "Signed URLs"],
+          icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>`,
+        },
+      ],
+    },
   },
 
   security: [

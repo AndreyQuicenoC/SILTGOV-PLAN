@@ -164,12 +164,17 @@ function init() {
     elements.themeToggle.addEventListener("click", toggleTheme);
 
     if (typeof TEAM_MEMBERS_DATA === "undefined") {
-      throw new Error("No se encontraron datos del equipo (TEAM_MEMBERS_DATA).");
+      throw new Error(
+        "No se encontraron datos del equipo (TEAM_MEMBERS_DATA).",
+      );
     }
 
     renderTeamHero(TEAM_MEMBERS_DATA.team);
 
-    if (!Array.isArray(TEAM_MEMBERS_DATA.members) || TEAM_MEMBERS_DATA.members.length === 0) {
+    if (
+      !Array.isArray(TEAM_MEMBERS_DATA.members) ||
+      TEAM_MEMBERS_DATA.members.length === 0
+    ) {
       throw new Error("No se encontraron integrantes en el equipo.");
     }
 
@@ -178,7 +183,6 @@ function init() {
       .join("");
 
     elements.membersSection.hidden = false;
-
   } catch (err) {
     console.error("Error al inicializar team_members:", err);
     elements.errorState.hidden = false;

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
@@ -50,7 +50,6 @@
 
     <main class="main">
       <div class="container">
-
         <!-- Resumen del proyecto -->
         <section class="info-section">
           <p class="info-description" id="team-description"></p>
@@ -68,30 +67,36 @@
         </section>
 
         <!-- Contadores de tareas por desarrollador (proyecto completo) -->
-        <section id="global-task-counters" hidden aria-label="Distribucion de tareas por desarrollador"></section>
+        <section
+          id="global-task-counters"
+          hidden
+          aria-label="Distribucion de tareas por desarrollador"
+        ></section>
 
         <!-- Distribucion por sprints -->
         <section class="sprints-section">
           <h2 class="section-title">Historias y Tareas por Sprint</h2>
           <p class="section-description" id="sprints-subtitle">
-            Planificacion de 12 semanas - cada historia con sus tareas y asignaciones
+            <!-- Renderizado dinamico desde team_distribution.js -->
           </p>
           <div id="sprints-container" class="sprints-container">
             <!-- Se carga dinamicamente -->
           </div>
         </section>
-
       </div>
     </main>
 
     <footer class="footer">
       <div class="container">
-        <p>&copy; 2025 SILTGOV - Sistema Integrado de Liquidaciones del Gobierno</p>
+        <p>
+          &copy; 2025 SILTGOV - Sistema Integrado de Liquidaciones del Gobierno
+        </p>
         <p>Equipo ClustLayer - metodologia agil Scrum</p>
       </div>
     </footer>
 
     <script src="../data/team_data.js"></script>
+    <script src="../data/team_members_data.js"></script>
     <script src="../scripts/team_distribution.js"></script>
   </body>
 </html>

@@ -138,7 +138,8 @@ function loadStories() {
     state.allStories.forEach((story) => {
       state.epics.add(story.epic);
       const s = story.sprint || "Sin sprint";
-      state.sprintTotals[s] = (state.sprintTotals[s] || 0) + (story.points || 0);
+      state.sprintTotals[s] =
+        (state.sprintTotals[s] || 0) + (story.points || 0);
     });
 
     populateEpicFilter();
@@ -203,7 +204,10 @@ function renderStories() {
 
       sprintOrder.forEach((sprint) => {
         const stories = groups[sprint];
-        const sprintTotal = stories.reduce((acc, s) => acc + (s.points || 0), 0);
+        const sprintTotal = stories.reduce(
+          (acc, s) => acc + (s.points || 0),
+          0,
+        );
         html += `
           <div class="sprint-group-header" style="grid-column: 1 / -1; margin: 1rem 0 0.5rem; padding: 0.6rem 1rem; background: var(--bg-secondary); border-radius: 8px; border-left: 4px solid var(--primary-color); display: flex; align-items: center; justify-content: space-between;">
             <span style="font-weight: 700; color: var(--text-primary); font-size: 0.95rem;">${escapeHtml(sprint)}</span>
@@ -214,7 +218,8 @@ function renderStories() {
       });
     } else {
       const sprintTotal = state.filteredStories.reduce(
-        (acc, s) => acc + (s.points || 0), 0
+        (acc, s) => acc + (s.points || 0),
+        0,
       );
       html += `
         <div class="sprint-group-header" style="grid-column: 1 / -1; margin: 0 0 0.5rem; padding: 0.6rem 1rem; background: var(--bg-secondary); border-radius: 8px; border-left: 4px solid var(--primary-color); display: flex; align-items: center; justify-content: space-between;">
@@ -222,19 +227,24 @@ function renderStories() {
           <span style="background: var(--primary-color); color: white; padding: 0.2rem 0.7rem; border-radius: 20px; font-size: 0.78rem; font-weight: 700;">${sprintTotal} pts</span>
         </div>
       `;
-      html += state.filteredStories.map((story) => createStoryCard(story)).join("");
+      html += state.filteredStories
+        .map((story) => createStoryCard(story))
+        .join("");
     }
 
     elements.storiesContainer.innerHTML = html;
 
     // Agregar event listeners a las tarjetas
     document.querySelectorAll(".story-card").forEach((card, index) => {
-      const visibleStories = elements.storiesContainer.querySelectorAll(".story-card");
+      const visibleStories =
+        elements.storiesContainer.querySelectorAll(".story-card");
       const storyIndex = Array.from(visibleStories).indexOf(card);
       card.addEventListener("click", () => {
         const flatList = state.filteredStories;
         // Find which story this card corresponds to by order
-        const allCards = Array.from(elements.storiesContainer.querySelectorAll(".story-card"));
+        const allCards = Array.from(
+          elements.storiesContainer.querySelectorAll(".story-card"),
+        );
         const cardIdx = allCards.indexOf(card);
         // Map card index to filtered story (in order)
         if (cardIdx >= 0 && cardIdx < flatList.length) {
@@ -243,7 +253,9 @@ function renderStories() {
       });
       card.addEventListener("keydown", (e) => {
         if (e.key === "Enter" || e.key === " ") {
-          const allCards = Array.from(elements.storiesContainer.querySelectorAll(".story-card"));
+          const allCards = Array.from(
+            elements.storiesContainer.querySelectorAll(".story-card"),
+          );
           const cardIdx = allCards.indexOf(card);
           if (cardIdx >= 0 && cardIdx < state.filteredStories.length) {
             openModal(state.filteredStories[cardIdx]);
@@ -281,24 +293,24 @@ function createStoryCard(story) {
         }">
             <div class="story-header">
                 <span class="story-code">${escapeHtml(
-                  story.code || "N/A"
+                  story.code || "N/A",
                 )}</span>
                 <span class="story-epic">${escapeHtml(
-                  story.epic || "Sin epica"
+                  story.epic || "Sin epica",
                 )}</span>
                 ${
                   story.sprint
                     ? `<span class="story-sprint" style="background: var(--accent-color); color: black; padding: 0.25rem 0.5rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600;">${escapeHtml(
-                        story.sprint
+                        story.sprint,
                       )}</span>`
                     : ""
                 }
             </div>
             <h3 class="story-title">${escapeHtml(
-              story.title || "Sin titulo"
+              story.title || "Sin titulo",
             )}</h3>
             <p class="story-description">${escapeHtml(
-              story.description || "Sin descripcion"
+              story.description || "Sin descripcion",
             )}</p>
             <div class="story-footer">
                 <span class="badge">${acceptanceCriteriaCount} criterios</span>
@@ -330,7 +342,7 @@ function populateEpicFilter() {
     .sort()
     .map(
       (epic) =>
-        `<option value="${escapeHtml(epic)}">${escapeHtml(epic)}</option>`
+        `<option value="${escapeHtml(epic)}">${escapeHtml(epic)}</option>`,
     )
     .join("");
 
@@ -352,7 +364,7 @@ function applyFilters() {
         story.title.toLowerCase().includes(searchTerm) ||
         story.description.toLowerCase().includes(searchTerm) ||
         story.epic.toLowerCase().includes(searchTerm) ||
-        (story.sprint && story.sprint.toLowerCase().includes(searchTerm))
+        (story.sprint && story.sprint.toLowerCase().includes(searchTerm)),
     );
   }
 
@@ -414,37 +426,42 @@ function openModal(story) {
 
   const points = story.points || 0;
 
-  const tasksHTML = tasks.length > 0
-    ? `<div style="margin-bottom:1.5rem;">
+  const tasksHTML =
+    tasks.length > 0
+      ? `<div style="margin-bottom:1.5rem;">
         <h3 style="color:var(--text-primary);margin:0 0 0.75rem 0;font-size:1.25rem;">Tareas</h3>
         <div style="display:flex;flex-direction:column;gap:0.5rem;">
-          ${tasks.map((t) => `
+          ${tasks
+            .map(
+              (t) => `
             <div style="display:grid;grid-template-columns:80px 1fr 160px;gap:0.5rem;padding:0.5rem 0.75rem;background:var(--bg-secondary);border-radius:6px;align-items:center;font-size:0.82rem;">
               <span style="font-family:monospace;color:var(--text-secondary);font-weight:600;">${escapeHtml(t.id || "")}</span>
               <span style="color:var(--text-primary);">${escapeHtml(t.title || "")}</span>
               <span style="color:var(--text-secondary);text-align:right;">${escapeHtml(t.assignedTo || "")} <em style="font-style:italic;">(${escapeHtml(t.role || "")})</em></span>
-            </div>`).join("")}
+            </div>`,
+            )
+            .join("")}
         </div>
        </div>`
-    : "";
+      : "";
 
   const modalContent = `
     <div style="padding: 2rem;">
       <div style="margin-bottom: 1.5rem;">
         <h2 style="margin: 0 0 0.5rem 0; color: var(--text-primary); font-size: 1.75rem;">${escapeHtml(
-          story.code || "N/A"
+          story.code || "N/A",
         )} - ${escapeHtml(story.title || "Sin titulo")}</h2>
         <div style="display: flex; gap: 0.75rem; margin-top: 0.75rem; flex-wrap: wrap;">
           <span style="background: var(--primary-color); color: white; padding: 0.25rem 0.75rem; border-radius: 6px; font-size: 0.875rem;">${escapeHtml(
-            story.code || "N/A"
+            story.code || "N/A",
           )}</span>
           <span style="background: var(--border-color); color: var(--text-primary); padding: 0.25rem 0.75rem; border-radius: 6px; font-size: 0.875rem;">${escapeHtml(
-            story.epic || "Sin epica"
+            story.epic || "Sin epica",
           )}</span>
           ${
             story.sprint
               ? `<span style="background: var(--accent-color); color: black; padding: 0.25rem 0.75rem; border-radius: 6px; font-size: 0.875rem;">${escapeHtml(
-                  story.sprint
+                  story.sprint,
                 )}</span>`
               : ""
           }
@@ -470,7 +487,7 @@ function openModal(story) {
           </button>
         </div>
         <p id="description-content" style="color: var(--text-secondary); line-height: 1.8; margin: 0; white-space: pre-line;">${escapeHtml(
-          story.description || "Sin descripcion disponible"
+          story.description || "Sin descripcion disponible",
         )}</p>
       </div>
 
@@ -498,7 +515,7 @@ function openModal(story) {
                     onmouseout="this.style.background='var(--primary-color)'; this.style.transform='scale(1)';"
                     onclick="copyToClipboard('${escapeHtml(criterion).replace(
                       /'/g,
-                      "\\'"
+                      "\\'",
                     )}', this)"
                     title="Copiar criterio">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -506,7 +523,7 @@ function openModal(story) {
                       <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
                     </svg>
                   </button>
-                </li>`
+                </li>`,
             )
             .join("")}
         </ul>
@@ -538,7 +555,7 @@ function openModal(story) {
           ${definitionOfDone
             .map(
               (item) =>
-                `<li style="margin-bottom: 0.5rem;">${escapeHtml(item)}</li>`
+                `<li style="margin-bottom: 0.5rem;">${escapeHtml(item)}</li>`,
             )
             .join("")}
         </ul>
@@ -721,8 +738,8 @@ function showCopyFeedback(button, success) {
  */
 function csvEscape(value) {
   const str = String(value == null ? "" : value)
-    .replace(/\r?\n/g, " | ")   // saltos de linea → separador visual
-    .replace(/"/g, '""');        // comillas → doble comilla (estandar CSV)
+    .replace(/\r?\n/g, " | ") // saltos de linea → separador visual
+    .replace(/"/g, '""'); // comillas → doble comilla (estandar CSV)
   return `"${str}"`;
 }
 
@@ -737,7 +754,9 @@ function csvEscape(value) {
 function exportToJiraCSV() {
   const stories = state.filteredStories;
   if (!stories || stories.length === 0) {
-    alert("No hay historias para exportar. Ajusta los filtros e intenta de nuevo.");
+    alert(
+      "No hay historias para exportar. Ajusta los filtros e intenta de nuevo.",
+    );
     return;
   }
 
@@ -758,14 +777,13 @@ function exportToJiraCSV() {
   const rows = stories.map((story) => {
     const acceptanceCriteria = Array.isArray(story.acceptanceCriteria)
       ? story.acceptanceCriteria.join(" | ")
-      : (story.acceptanceCriteria || "");
+      : story.acceptanceCriteria || "";
 
     const definitionOfDone = Array.isArray(story.definitionOfDone)
       ? story.definitionOfDone.join(" | ")
-      : (story.definitionOfDone || "");
+      : story.definitionOfDone || "";
 
-    const description = (story.description || "")
-      .replace(/\r?\n/g, " ");
+    const description = (story.description || "").replace(/\r?\n/g, " ");
 
     return [
       csvEscape(`[${story.code}] ${story.title}`),
@@ -786,7 +804,9 @@ function exportToJiraCSV() {
 
   // BOM UTF-8 para que Excel abra el CSV correctamente
   const bom = "\uFEFF";
-  const blob = new Blob([bom + csvContent], { type: "text/csv;charset=utf-8;" });
+  const blob = new Blob([bom + csvContent], {
+    type: "text/csv;charset=utf-8;",
+  });
   const url = URL.createObjectURL(blob);
 
   const link = document.createElement("a");

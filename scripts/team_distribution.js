@@ -68,11 +68,22 @@ function calcTaskCounters(sprints) {
  * @param {number} totalTasks - Total de tareas para calcular el porcentaje
  */
 function renderCounterTable(counts, totalTasks) {
-  const devColors = {
-    "Juan Francesco Garcia": "#3B82F6",
-    "Ivan Ausecha":          "#10B981",
-    "Adolfo Andrey Quiceno": "#8B5CF6",
-  };
+  // Construir devColors dinamicamente desde TEAM_MEMBERS_DATA
+  const devColors = {};
+  if (typeof TEAM_MEMBERS_DATA !== "undefined" && TEAM_MEMBERS_DATA.members) {
+    TEAM_MEMBERS_DATA.members.forEach((m) => {
+      devColors[m.fullName] = m.avatarColor.secondary;
+      // tambien mapear por nickname y nombre corto
+      if (m.nickname) devColors[m.nickname] = m.avatarColor.secondary;
+      const shortName = m.fullName.split(" ")[0] + " " + (m.fullName.split(" ").pop() || "");
+      devColors[shortName] = m.avatarColor.secondary;
+    });
+  } else {
+    // fallback si TEAM_MEMBERS_DATA no esta cargado
+    devColors["Juan Francesco Garcia"] = "#3B82F6";
+    devColors["Ivan Ausecha"] = "#10B981";
+    devColors["Adolfo Andrey Quiceno"] = "#8B5CF6";
+  }
 
   const sortedDevs = Object.entries(counts).sort((a, b) => b[1] - a[1]);
 
@@ -80,9 +91,11 @@ function renderCounterTable(counts, totalTasks) {
     <div class="task-counter-table">
       ${sortedDevs
         .map(([dev, count]) => {
-          const pct = totalTasks > 0 ? Math.round((count / totalTasks) * 100) : 0;
+          const pct =
+            totalTasks > 0 ? Math.round((count / totalTasks) * 100) : 0;
           const color = devColors[dev] || "#64748b";
-          const shortName = dev.split(" ")[0] + " " + (dev.split(" ").pop() || "");
+          const shortName =
+            dev.split(" ")[0] + " " + (dev.split(" ").pop() || "");
           return `
             <div class="task-counter-row">
               <span class="task-counter-dev" title="${escapeHtml(dev)}">${escapeHtml(shortName)}</span>
@@ -162,8 +175,9 @@ function renderTaskRow(task) {
 
 function renderStoryBlock(story) {
   const tasks = Array.isArray(story.tasks) ? story.tasks : [];
-  const tasksHTML = tasks.length > 0
-    ? `<div class="story-tasks">
+  const tasksHTML =
+    tasks.length > 0
+      ? `<div class="story-tasks">
         <div class="tasks-header">
           <span class="tasks-col tasks-col-id">ID</span>
           <span class="tasks-col tasks-col-title">Tarea</span>
@@ -172,7 +186,7 @@ function renderStoryBlock(story) {
         </div>
         ${tasks.map(renderTaskRow).join("")}
        </div>`
-    : `<p class="no-tasks">Sin tareas registradas.</p>`;
+      : `<p class="no-tasks">Sin tareas registradas.</p>`;
 
   return `
     <div class="story-block">
@@ -189,20 +203,22 @@ function renderStoryBlock(story) {
 
 function renderSprintCard(sprint, sprintCounts) {
   const stories = Array.isArray(sprint.stories) ? sprint.stories : [];
-  const storiesHTML = stories.length > 0
-    ? stories.map(renderStoryBlock).join("")
-    : `<p class="no-stories">Sin historias asignadas.</p>`;
+  const storiesHTML =
+    stories.length > 0
+      ? stories.map(renderStoryBlock).join("")
+      : `<p class="no-stories">Sin historias asignadas.</p>`;
 
   const sprintKey = sprint.id || sprint.name;
   const counts = sprintCounts[sprintKey] || {};
   const totalSprintTasks = Object.values(counts).reduce((a, b) => a + b, 0);
 
-  const counterHTML = totalSprintTasks > 0
-    ? `<div class="sprint-task-counter">
+  const counterHTML =
+    totalSprintTasks > 0
+      ? `<div class="sprint-task-counter">
         <span class="sprint-counter-label">Tareas: ${totalSprintTasks}</span>
         ${renderCounterTable(counts, totalSprintTasks)}
        </div>`
-    : "";
+      : "";
 
   return `
     <div class="sprint-card" style="border-left: 4px solid ${escapeHtml(sprint.color || "#64748b")}">
@@ -247,6 +263,13 @@ function init() {
 
     renderMetrics(TEAM_DATA);
 
+    // Subtitulo dinamico con numero de semanas/sprints desde TEAM_DATA
+    const subtitleEl = document.getElementById("sprints-subtitle");
+    if (subtitleEl) {
+      const numSprints = TEAM_DATA.totalSprints || (TEAM_DATA.sprints || []).length;
+      subtitleEl.textContent = `Planificacion de ${numSprints} sprints - cada historia con sus tareas y asignaciones`;
+    }
+
     const sprints = Array.isArray(TEAM_DATA.sprints) ? TEAM_DATA.sprints : [];
 
     // Calculate and render task counters
@@ -261,8 +284,9 @@ function init() {
       return;
     }
 
-    container.innerHTML = sprints.map((sprint) => renderSprintCard(sprint, perSprint)).join("");
-
+    container.innerHTML = sprints
+      .map((sprint) => renderSprintCard(sprint, perSprint))
+      .join("");
   } catch (err) {
     console.error("Error en team_distribution:", err);
     const errState = document.getElementById("error-state");
