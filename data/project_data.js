@@ -34,7 +34,7 @@ const PROJECT_DATA = {
       title: "Trazabilidad y Auditoría",
       icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`,
       content:
-        "Cada acción significativa es registrada con: IP, dispositivo, hora, usuario, acción y resultado. Los logs son inmutables, con retención mínima de 2 años. Este requisito es exigido por el marco normativo de actos administrativos.",
+        "Cada acción significativa es registrada con: IP, dispositivo, hora, usuario, acción y resultado. Los logs son inmutables, con retención mínima de 4 años. Este requisito es exigido por el marco normativo de actos administrativos.",
     },
     {
       title: "Separación de Funciones",
@@ -71,7 +71,7 @@ const PROJECT_DATA = {
       "Modelo multi-entidad: soporte para Gobernaciones, Alcaldías y Secretarías.",
       "Generación automática de PDF institucional con código de verificación.",
       "Control de acceso por roles: Liquidador, Administrador, Pagador, Superusuario.",
-      "Sistema de auditoría y logs inmutables por 2 años.",
+      "Sistema de auditoría y logs inmutables por 4 años.",
       "Notificaciones internas por acción (asignación, pago, vencimientos).",
     ],
     outScope: [
@@ -216,16 +216,29 @@ const PROJECT_DATA = {
         icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`,
         color: "#8B5CF6",
         description:
-          "Gestiona sentencias, cálculos, estados, adjuntos, generación de PDF, registro de pagos, comprobantes y transición de estados.",
-        tech: ["Node.js", "PDFKit", "PostgreSQL"],
+          "Gestiona sentencias, cálculos automáticos, ciclo de estados y beneficiarios.",
+        tech: ["Node.js", "PostgreSQL"],
         details: [
           "Registro y asignación de sentencias judiciales.",
           "Motor de cálculo automático de liquidaciones.",
           "Gestión del ciclo de estados: creada, en proceso, terminada, pagada.",
           "Gestión de beneficiarios centralizada — evita duplicación de datos.",
-          "Generación de PDF oficial con código de verificación y firma.",
-          "Registro de pagos con comprobante por parte de Hacienda.",
-          "Control de adjuntos y documentos de soporte.",
+          "Transición de estados con validaciones de rol y notificaciones internas.",
+        ],
+      },
+      {
+        name: "Servicio de Documentos de Pago",
+        icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`,
+        color: "#10B981",
+        description:
+          "Gestiona la generación de PDF oficiales, registro de pagos, comprobantes y adjuntos de soporte.",
+        tech: ["Node.js", "PDFKit", "PostgreSQL"],
+        details: [
+          "Generación de PDF oficial de liquidación con código de verificación y firma.",
+          "Registro de pagos realizados por Hacienda con trazabilidad completa.",
+          "Carga y validación de comprobantes de pago (archivos PDF).",
+          "Gestión de adjuntos y documentos de soporte asociados a cada liquidación.",
+          "Servicio independiente: el resto del sistema no genera ni almacena PDFs directamente.",
         ],
       },
       {
@@ -233,13 +246,13 @@ const PROJECT_DATA = {
         icon: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`,
         color: "#F59E0B",
         description:
-          "Microservicio desacoplado. Registra todas las acciones críticas de forma inmutable con retención de 2 años.",
-        tech: ["Node.js", "PostgreSQL", "Retention 2y"],
+          "Microservicio desacoplado. Registra todas las acciones críticas de forma inmutable con retención de 4 años.",
+        tech: ["Node.js", "PostgreSQL", "Retention 4y"],
         details: [
           "Microservicio completamente desacoplado del resto del sistema.",
           "Registra IP, dispositivo, usuario, hora, acción y resultado de cada operación.",
           "Logs inmutables: sin posibilidad de edición o eliminación desde la aplicación.",
-          "Retención mínima de 2 años conforme a normativa de actos administrativos.",
+          "Retención mínima de 4 años conforme a normativa de actos administrativos.",
           "Accesible solo para el rol Superusuario mediante dashboard de auditoría.",
         ],
       },
