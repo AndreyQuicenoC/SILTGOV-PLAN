@@ -217,7 +217,7 @@ const PROJECT_DATA = {
         color: "#8B5CF6",
         description:
           "Gestiona sentencias, cálculos automáticos, ciclo de estados y beneficiarios.",
-        tech: ["Node.js", "PostgreSQL"], origin/main
+        tech: ["Node.js", "PostgreSQL"],
         details: [
           "Registro y asignación de sentencias judiciales.",
           "Motor de cálculo automático de liquidaciones.",
@@ -238,7 +238,7 @@ const PROJECT_DATA = {
           "Registro de pagos realizados por Hacienda con trazabilidad completa.",
           "Carga y validación de comprobantes de pago (archivos PDF).",
           "Gestión de adjuntos y documentos de soporte asociados a cada liquidación.",
-          "Servicio independiente: el resto del sistema no genera ni almacena PDFs directamente.", origin/main
+          "Servicio independiente: el resto del sistema no genera ni almacena PDFs directamente.",
         ],
       },
       {
@@ -247,12 +247,12 @@ const PROJECT_DATA = {
         color: "#F59E0B",
         description:
           "Microservicio desacoplado. Registra todas las acciones críticas de forma inmutable con retención de 4 años.",
-        tech: ["Node.js", "PostgreSQL", "Retention 4y"], origin/main
+        tech: ["Node.js", "PostgreSQL", "Retention 4y"],
         details: [
           "Microservicio completamente desacoplado del resto del sistema.",
           "Registra IP, dispositivo, usuario, hora, acción y resultado de cada operación.",
           "Logs inmutables: sin posibilidad de edición o eliminación desde la aplicación.",
-          "Retención mínima de 4 años conforme a normativa de actos administrativos.", origin/main
+          "Retención mínima de 4 años conforme a normativa de actos administrativos.",
           "Accesible solo para el rol Superusuario mediante dashboard de auditoría.",
         ],
       },
